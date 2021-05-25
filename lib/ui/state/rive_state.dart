@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
-import 'package:tencent_video/common/listener/tap_notify.dart';
+import 'package:tencent_video/common/listener/tap.dart';
 
 class RiveSimpleStateMachineWidget extends StatefulWidget {
   final TapListener tapListener;

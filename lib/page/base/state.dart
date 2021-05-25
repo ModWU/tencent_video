@@ -16,18 +16,39 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
     _bootContext = bootContext;
 
     if (oldBootContext == null) {
-      updateBootContext(oldBootContext);
+      _updateBootContext(oldBootContext);
     } else if (oldBootContext != bootContext) {
       setState(() {
-        updateBootContext(oldBootContext);
+        _updateBootContext(oldBootContext);
       });
     }
   }
 
- void updateBootContext(BootContext? oldBootContext) {}
+  void changedPage() {}
+
+  void changedThemeStyle() {}
+
+  void updateBootContext(BootContext? oldBootContext) {}
+
+  bool isPage(PageCategory page) {
+    return bootContext.isPage(page);
+  }
+
+  void _updateBootContext(BootContext? oldBootContext) {
+
+    oldBootContext?.page.removeListener(changedPage);
+    oldBootContext?.themeStyle.removeListener(changedThemeStyle);
+
+    bootContext.page.addListener(changedPage);
+    bootContext.themeStyle.addListener(changedThemeStyle);
+
+    updateBootContext(oldBootContext);
+  }
 
   @override
   void dispose() {
+    bootContext.page.removeListener(changedPage);
+    bootContext.themeStyle.removeListener(changedThemeStyle);
     _bootContext = null;
     super.dispose();
   }

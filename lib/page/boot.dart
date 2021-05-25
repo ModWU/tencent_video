@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tencent_video/common/listener/tap_notify.dart';
+import 'package:tencent_video/common/listener/tap.dart';
 import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/manager/boot_manager.dart';
 import 'package:tencent_video/page/person.dart';
@@ -17,53 +17,23 @@ class Boot extends StatefulWidget {
 }
 
 class _BootState extends State<Boot> with BootManager {
-  ThemeData get _themeData {
-    switch (page.value!) {
-      case PageCategory.home:
-        return Theme.of(context).copyWith(primaryColor: Colors.grey);
-
-      case PageCategory.doki:
-        return Theme.of(context).copyWith(primaryColor: Colors.white);
-
-      case PageCategory.vip:
-        return Theme.of(context).copyWith(primaryColor: Colors.black);
-
-      case PageCategory.message:
-        return Theme.of(context).copyWith(primaryColor: Colors.white);
-
-      case PageCategory.person:
-        return Theme.of(context).copyWith(primaryColor: Colors.white);
-    }
-  }
-
-  Widget get _body {
-    return IndexedStack(
-      index: page.value!.index,
-      children: [
-        HomePage(),
-        DokiPage(),
-        VipPage(),
-        MessagePage(),
-        PersonPage(),
-      ],
-    );
-  }
-
-  Widget get _bottomNavigationBar => _BottomNavigationBarWidget();
 
   @override
   void initState() {
     super.initState();
-    page.addListener(_pageChanger);
+    page.addListener(_rebuild);
+    themeStyle.addListener(_rebuild);
   }
 
   @override
   void dispose() {
-    page.removeListener(_pageChanger);
+    page.removeListener(_rebuild);
+    themeStyle.removeListener(_rebuild);
     super.dispose();
   }
 
-  void _pageChanger() {
+
+  void _rebuild() {
     setState(() {});
   }
 
@@ -71,14 +41,24 @@ class _BootState extends State<Boot> with BootManager {
   Widget build(BuildContext context) {
     return startBoot(
       child: Theme(
-        data: _themeData,
+        data: themeData,
         child: Scaffold(
-          bottomNavigationBar: _bottomNavigationBar,
-          body: _body,
+          bottomNavigationBar: _BottomNavigationBarWidget(),
+          body: IndexedStack(
+            index: page.value!.index,
+            children: [
+              HomePage(),
+              DokiPage(),
+              VipPage(),
+              MessagePage(),
+              PersonPage(),
+            ],
+          ),
         ),
       ),
     );
   }
+
 }
 
 class _BottomNavigationBarWidget extends StatefulWidget {
@@ -97,70 +77,67 @@ class _BottomNavigationBarWidgetState
   @override
   void updateBootContext(BootContext? oldBootContext) {
     _pageTapListener = new TapListener(bootContext.page.value!);
-    _updateListener(oldBootContext);
-  }
-
-  void _updateListener(BootContext? oldBootContext) {
-    oldBootContext?.page.removeListener(_pageListener);
-    oldBootContext?.bottomNavigationBar.removeListener(_bottomNavigationBarListener);
-    bootContext.page.addListener(_pageListener);
-    bootContext.bottomNavigationBar.addListener(_bottomNavigationBarListener);
-  }
-
-  void _disposeListener() {
-    bootContext.page.removeListener(_pageListener);
-    bootContext.bottomNavigationBar.removeListener(_bottomNavigationBarListener);
-  }
-
-  void _pageListener() {
-    _pageTapListener!.onTap(bootContext.page.value!);
-  }
-
-  void _bottomNavigationBarListener() {
-    setState(() {});
   }
 
   @override
+  void changedPage() {
+    _pageTapListener!.onTap(bootContext.page.value!);
+  }
+
+
+  @override
   void dispose() {
-    _disposeListener();
     _pageTapListener = null;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-            icon: _getRiveIcon(PageCategory.home, 20),
-            label: S.of(context).home_tle),
-        BottomNavigationBarItem(
-            icon: _getRiveIcon(PageCategory.doki, 20),
-            label: S.of(context).doki_tle),
-        BottomNavigationBarItem(
-            icon: _getRiveIcon(PageCategory.vip, 20),
-            label: S.of(context).vip_tle),
-        BottomNavigationBarItem(
-            icon: _getRiveIcon(PageCategory.message, 20),
-            label: S.of(context).message_tle),
-        BottomNavigationBarItem(
-            icon: _getRiveIcon(PageCategory.person, 20),
-            label: S.of(context).person_tle),
-      ],
-      currentIndex: bootContext.page.value!.index,
-      unselectedItemColor: Colors.black,
-      selectedItemColor: Colors.red,
-      backgroundColor: bootContext.bottomNavigationBar.value!.backgroundColor,
-      unselectedFontSize: 12,
-      selectedFontSize: 12,
-      iconSize: 20,
-      type: BottomNavigationBarType.fixed,
-      showSelectedLabels: true,
-      showUnselectedLabels: true,
-      elevation: 4,
-      onTap: (int index) {
-        bootContext.page.value = PageCategory.values[index];
-      },
+    final ThemeData localTheme = Theme.of(context);
+    return Theme(
+      data: localTheme.copyWith(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+      ),
+      child: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+              icon: _getRiveIcon(PageCategory.home, 20),
+              label: S.of(context).home_tle),
+          BottomNavigationBarItem(
+              icon: _getRiveIcon(PageCategory.doki, 20),
+              label: S.of(context).doki_tle),
+          BottomNavigationBarItem(
+              icon: _getRiveIcon(PageCategory.vip, 20),
+              label: S.of(context).vip_tle),
+          BottomNavigationBarItem(
+              icon: _getRiveIcon(PageCategory.message, 20),
+              label: S.of(context).message_tle),
+          BottomNavigationBarItem(
+              icon: _getRiveIcon(PageCategory.person, 20),
+              label: S.of(context).person_tle),
+        ],
+        currentIndex: bootContext.page.value!.index,
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.red,
+        backgroundColor: bootContext.themeData.appBarTheme.backgroundColor,
+        selectedLabelStyle: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w500,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w500,
+        ),
+        iconSize: 20,
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        elevation: 4,
+        onTap: (int index) {
+          bootContext.page.value = PageCategory.values[index];
+        },
+      ),
     );
   }
 

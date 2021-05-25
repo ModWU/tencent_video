@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tencent_video/common/listener/obs.dart';
-import 'package:tencent_video/page/state/attr.dart';
+import 'package:tencent_video/common/listener/ob.dart';
+import 'package:tencent_video/page/attr/static_attr.dart';
+import 'package:tencent_video/page/attr/widget_attr.dart';
 
 enum PageCategory {
   home,
@@ -12,9 +13,12 @@ enum PageCategory {
 
 abstract class BootContext {
 
-  Obs<PageCategory> get page;
-  Obs<NavigationBarAttr> get bottomNavigationBar;
-  void changeNavigationBar(NavigationBarAttr value);
+  Ob<PageCategory> get page;
+  ThemeData get themeData;
+  TextStyle get bodyText;
+  Ob<ThemeStyle> get themeStyle;
+  bool isPage(PageCategory page);
+  void changeThemeStyle(ThemeStyle value);
 
   static BootContext? of(BuildContext context) {
     final _BootContextScope? bootContextScope =
@@ -26,15 +30,26 @@ abstract class BootContext {
 
 mixin BootManager implements BootContext {
 
-  Obs<PageCategory> _page = PageCategory.home.obs;
+  Ob<PageCategory> _page = PageCategory.home.ob;
 
-  Obs<NavigationBarAttr> _bottomNavigationBar = Attrs.defNavigationBarAttr.obs;
+  ThemeData _themeData = ThemeAttrs.get(ThemeStyle.normal);
+
+  ThemeData get themeData => _themeData;
+
+  TextStyle get bodyText => _themeData.textTheme.bodyText1!;
+
+  Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
 
   @override
-  Obs<PageCategory> get page => _page;
+  bool isPage(PageCategory page) {
+    return page == _page.value;
+  }
 
   @override
-  Obs<NavigationBarAttr> get bottomNavigationBar => _bottomNavigationBar;
+  Ob<PageCategory> get page => _page;
+
+  @override
+  Ob<ThemeStyle> get themeStyle => _themeStyle;
 
   Widget startBoot({required Widget child}) {
     return _BootContextScope(
@@ -44,10 +59,11 @@ mixin BootManager implements BootContext {
   }
 
   @override
-  void changeNavigationBar(NavigationBarAttr value) {
-    if (_bottomNavigationBar.value == value) return;
+  void changeThemeStyle(ThemeStyle value) {
+    if (_themeStyle.value == value) return;
 
-    _bottomNavigationBar.value = value;
+    _themeData = ThemeAttrs.get(value);
+    _themeStyle.value = value;
   }
 
 }
