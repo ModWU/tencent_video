@@ -21,11 +21,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "car_txt" : MessageLookupByLibrary.simpleMessage("动漫"),
+    "chi_txt" : MessageLookupByLibrary.simpleMessage("少儿"),
+    "cho_txt" : MessageLookupByLibrary.simpleMessage("精选"),
+    "dis_txt" : MessageLookupByLibrary.simpleMessage("发现"),
+    "doc_txt" : MessageLookupByLibrary.simpleMessage("纪录片"),
     "doki_tle" : MessageLookupByLibrary.simpleMessage("doki"),
     "home_tle" : MessageLookupByLibrary.simpleMessage("首页"),
     "message_tle" : MessageLookupByLibrary.simpleMessage("消息"),
+    "mov_txt" : MessageLookupByLibrary.simpleMessage("电影"),
+    "nba_txt" : MessageLookupByLibrary.simpleMessage("NBA"),
     "person_tle" : MessageLookupByLibrary.simpleMessage("个人中心"),
+    "sub_txt" : MessageLookupByLibrary.simpleMessage("订阅"),
+    "tel_txt" : MessageLookupByLibrary.simpleMessage("电视剧"),
     "title" : MessageLookupByLibrary.simpleMessage("腾讯视频"),
+    "var_txt" : MessageLookupByLibrary.simpleMessage("综艺"),
     "vip_tle" : MessageLookupByLibrary.simpleMessage("VIP会员")
   };
 }

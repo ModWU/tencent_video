@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'attr/static_attr.dart';
-import 'base/state.dart';
-import 'manager/boot_manager.dart';
+import 'package:tencent_video/resources/styles.dart';
+import '../base.dart';
+import '../boot_manager.dart';
 
 class VipPage extends StatefulWidget {
   @override

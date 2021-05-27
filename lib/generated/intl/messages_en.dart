@@ -21,11 +21,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "car_txt" : MessageLookupByLibrary.simpleMessage("cartoon"),
+    "chi_txt" : MessageLookupByLibrary.simpleMessage("children"),
+    "cho_txt" : MessageLookupByLibrary.simpleMessage("choiceness"),
+    "dis_txt" : MessageLookupByLibrary.simpleMessage("discover"),
+    "doc_txt" : MessageLookupByLibrary.simpleMessage("documentary"),
     "doki_tle" : MessageLookupByLibrary.simpleMessage("doki"),
     "home_tle" : MessageLookupByLibrary.simpleMessage("home"),
     "message_tle" : MessageLookupByLibrary.simpleMessage("message"),
+    "mov_txt" : MessageLookupByLibrary.simpleMessage("movie"),
+    "nba_txt" : MessageLookupByLibrary.simpleMessage("NBA"),
     "person_tle" : MessageLookupByLibrary.simpleMessage("person"),
+    "sub_txt" : MessageLookupByLibrary.simpleMessage("subscribe"),
+    "tel_txt" : MessageLookupByLibrary.simpleMessage("teleplay"),
     "title" : MessageLookupByLibrary.simpleMessage("tencent video"),
+    "var_txt" : MessageLookupByLibrary.simpleMessage("variety"),
     "vip_tle" : MessageLookupByLibrary.simpleMessage("VIP")
   };
 }

@@ -106,6 +106,106 @@ class S {
       args: [],
     );
   }
+
+  /// `subscribe`
+  String get sub_txt {
+    return Intl.message(
+      'subscribe',
+      name: 'sub_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `choiceness`
+  String get cho_txt {
+    return Intl.message(
+      'choiceness',
+      name: 'cho_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `discover`
+  String get dis_txt {
+    return Intl.message(
+      'discover',
+      name: 'dis_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `NBA`
+  String get nba_txt {
+    return Intl.message(
+      'NBA',
+      name: 'nba_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `teleplay`
+  String get tel_txt {
+    return Intl.message(
+      'teleplay',
+      name: 'tel_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `movie`
+  String get mov_txt {
+    return Intl.message(
+      'movie',
+      name: 'mov_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `variety`
+  String get var_txt {
+    return Intl.message(
+      'variety',
+      name: 'var_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `children`
+  String get chi_txt {
+    return Intl.message(
+      'children',
+      name: 'chi_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `cartoon`
+  String get car_txt {
+    return Intl.message(
+      'cartoon',
+      name: 'car_txt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `documentary`
+  String get doc_txt {
+    return Intl.message(
+      'documentary',
+      name: 'doc_txt',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

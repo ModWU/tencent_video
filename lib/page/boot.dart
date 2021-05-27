@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/tap.dart';
 import 'package:tencent_video/generated/l10n.dart';
-import 'package:tencent_video/page/manager/boot_manager.dart';
-import 'package:tencent_video/page/person.dart';
-import 'package:tencent_video/page/vip.dart';
+import 'package:tencent_video/page/person/person.dart';
+import 'package:tencent_video/page/vip/vip.dart';
 import 'package:tencent_video/ui/state/rive_state.dart';
-import 'base/state.dart';
-import 'doki.dart';
-import 'home.dart';
-import 'message.dart';
+import 'boot_manager.dart';
+import 'base.dart';
+import 'doki/doki.dart';
+import 'home/home.dart';
+import 'message/message.dart';
 
 class Boot extends StatefulWidget {
   @override
@@ -31,7 +31,6 @@ class _BootState extends State<Boot> with BootManager {
     themeStyle.removeListener(_rebuild);
     super.dispose();
   }
-
 
   void _rebuild() {
     setState(() {});
@@ -103,37 +102,27 @@ class _BottomNavigationBarWidgetState
         items: [
           BottomNavigationBarItem(
               icon: _getRiveIcon(PageCategory.home, 20),
+              tooltip: '',
               label: S.of(context).home_tle),
           BottomNavigationBarItem(
               icon: _getRiveIcon(PageCategory.doki, 20),
+              tooltip: '',
               label: S.of(context).doki_tle),
           BottomNavigationBarItem(
               icon: _getRiveIcon(PageCategory.vip, 20),
+              tooltip: '',
               label: S.of(context).vip_tle),
           BottomNavigationBarItem(
               icon: _getRiveIcon(PageCategory.message, 20),
+              tooltip: '',
               label: S.of(context).message_tle),
           BottomNavigationBarItem(
               icon: _getRiveIcon(PageCategory.person, 20),
+              tooltip: '',
               label: S.of(context).person_tle),
         ],
         currentIndex: bootContext.page.value!.index,
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Colors.red,
-        backgroundColor: bootContext.themeData.appBarTheme.backgroundColor,
-        selectedLabelStyle: TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w500,
-        ),
         iconSize: 20,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        elevation: 4,
         onTap: (int index) {
           bootContext.page.value = PageCategory.values[index];
         },

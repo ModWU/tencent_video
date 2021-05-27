@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/ob.dart';
-import 'package:tencent_video/page/attr/static_attr.dart';
-import 'package:tencent_video/page/attr/widget_attr.dart';
+import 'package:tencent_video/resources/styles.dart';
 
 enum PageCategory {
   home,

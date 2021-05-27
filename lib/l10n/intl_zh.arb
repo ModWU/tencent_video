@@ -4,5 +4,16 @@
   "doki_tle": "doki",
   "vip_tle": "VIP会员",
   "message_tle": "消息",
-  "person_tle": "个人中心"
+  "person_tle": "个人中心",
+
+  "sub_txt": "订阅",
+  "cho_txt": "精选",
+  "dis_txt": "发现",
+  "nba_txt": "NBA",
+  "tel_txt": "电视剧",
+  "mov_txt": "电影",
+  "var_txt": "综艺",
+  "chi_txt": "少儿",
+  "car_txt": "动漫",
+  "doc_txt": "纪录片"
 }

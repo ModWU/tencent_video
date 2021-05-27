@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tencent_video/page/manager/boot_manager.dart';
+
+import 'boot_manager.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
-
   BootContext? _bootContext;
 
   BootContext get bootContext => _bootContext!;
@@ -34,10 +34,13 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
     return bootContext.isPage(page);
   }
 
-  void _updateBootContext(BootContext? oldBootContext) {
+  void _removeListeners(BootContext? bootContext) {
+    bootContext?.page.removeListener(changedPage);
+    bootContext?.themeStyle.removeListener(changedThemeStyle);
+  }
 
-    oldBootContext?.page.removeListener(changedPage);
-    oldBootContext?.themeStyle.removeListener(changedThemeStyle);
+  void _updateBootContext(BootContext? oldBootContext) {
+    _removeListeners(oldBootContext);
 
     bootContext.page.addListener(changedPage);
     bootContext.themeStyle.addListener(changedThemeStyle);
@@ -47,10 +50,9 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
 
   @override
   void dispose() {
-    bootContext.page.removeListener(changedPage);
-    bootContext.themeStyle.removeListener(changedThemeStyle);
+    assert(_bootContext != null);
+    _removeListeners(_bootContext);
     _bootContext = null;
     super.dispose();
   }
-
 }

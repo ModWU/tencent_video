@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tencent_video/page/manager/boot_manager.dart';
-
-import 'attr/static_attr.dart';
-import 'base/state.dart';
+import 'package:tencent_video/resources/styles.dart';
+import '../boot_manager.dart';
+import '../base.dart';
 
 class DokiPage extends StatefulWidget {
   @override

@@ -4,5 +4,16 @@
   "doki_tle": "doki",
   "vip_tle": "VIP",
   "message_tle": "message",
-  "person_tle": "person"
+  "person_tle": "person",
+
+  "sub_txt": "subscribe",
+  "cho_txt": "choiceness",
+  "dis_txt": "discover",
+  "nba_txt": "NBA",
+  "tel_txt": "teleplay",
+  "mov_txt": "movie",
+  "var_txt": "variety",
+  "chi_txt": "children",
+  "car_txt": "cartoon",
+  "doc_txt": "documentary"
 }
