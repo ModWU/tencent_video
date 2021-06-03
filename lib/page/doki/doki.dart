@@ -26,7 +26,7 @@ class _DokiPageState extends BaseState<DokiPage> {
 
   @override
   void changedPage() {
-    if (isPage(PageCategory.doki)) {
+    if (isPageAt(PageCategory.doki)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }
   }

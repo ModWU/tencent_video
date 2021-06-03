@@ -24,7 +24,7 @@ class _VipPageState extends BaseState<VipPage> {
 
   @override
   void changedPage() {
-    if (isPage(PageCategory.vip)) {
+    if (isPageAt(PageCategory.vip)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }
   }

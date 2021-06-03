@@ -4,6 +4,7 @@ import 'package:tencent_video/common/listener/tap.dart';
 import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/person/person.dart';
 import 'package:tencent_video/page/vip/vip.dart';
+import 'package:tencent_video/resources/styles.dart';
 import 'package:tencent_video/ui/state/rive_state.dart';
 import 'boot_manager.dart';
 import 'base.dart';
@@ -17,23 +18,32 @@ class Boot extends StatefulWidget {
 }
 
 class _BootState extends State<Boot> with BootManager {
+  ThemeData? _themeData;
 
   @override
   void initState() {
     super.initState();
+    _themeData = ThemeAttrs.get(ThemeStyle.normal);
     page.addListener(_rebuild);
-    themeStyle.addListener(_rebuild);
+    themeStyle.addListener(_changedThemeStyle);
   }
 
   @override
   void dispose() {
     page.removeListener(_rebuild);
-    themeStyle.removeListener(_rebuild);
+    themeStyle.removeListener(_changedThemeStyle);
+    _themeData = null;
     super.dispose();
   }
 
   void _rebuild() {
     setState(() {});
+  }
+
+  void _changedThemeStyle() {
+    setState(() {
+      _themeData = ThemeAttrs.get(themeStyle.value!);
+    });
   }
 
   @override
@@ -58,10 +68,14 @@ class _BootState extends State<Boot> with BootManager {
     );
   }
 
+  @override
+  TextStyle get bodyText => _themeData!.textTheme.bodyText1!;
+
+  @override
+  ThemeData get themeData => _themeData!;
 }
 
 class _BottomNavigationBarWidget extends StatefulWidget {
-
   const _BottomNavigationBarWidget();
 
   @override
@@ -70,7 +84,6 @@ class _BottomNavigationBarWidget extends StatefulWidget {
 
 class _BottomNavigationBarWidgetState
     extends BaseState<_BottomNavigationBarWidget> {
-
   TapListener? _pageTapListener;
 
   @override
@@ -82,7 +95,6 @@ class _BottomNavigationBarWidgetState
   void changedPage() {
     _pageTapListener!.onTap(bootContext.page.value!);
   }
-
 
   @override
   void dispose() {

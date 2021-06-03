@@ -24,7 +24,7 @@ class _MessagePageState extends BaseState<MessagePage> {
 
   @override
   void changedPage() {
-    if (isPage(PageCategory.message)) {
+    if (isPageAt(PageCategory.message)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }
   }

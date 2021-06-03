@@ -11,36 +11,28 @@ enum PageCategory {
 }
 
 abstract class BootContext {
-
   Ob<PageCategory> get page;
-  ThemeData get themeData;
-  TextStyle get bodyText;
   Ob<ThemeStyle> get themeStyle;
-  bool isPage(PageCategory page);
   void changeThemeStyle(ThemeStyle value);
+
+  bool isPageAt(PageCategory page);
+  TextStyle get bodyText;
+  ThemeData get themeData;
 
   static BootContext? of(BuildContext context) {
     final _BootContextScope? bootContextScope =
         context.dependOnInheritedWidgetOfExactType<_BootContextScope>();
     return bootContextScope?.bootContext;
   }
-
 }
 
 mixin BootManager implements BootContext {
-
   Ob<PageCategory> _page = PageCategory.home.ob;
-
-  ThemeData _themeData = ThemeAttrs.get(ThemeStyle.normal);
-
-  ThemeData get themeData => _themeData;
-
-  TextStyle get bodyText => _themeData.textTheme.bodyText1!;
 
   Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
 
   @override
-  bool isPage(PageCategory page) {
+  bool isPageAt(PageCategory page) {
     return page == _page.value;
   }
 
@@ -53,20 +45,19 @@ mixin BootManager implements BootContext {
   Widget startBoot({required Widget child}) {
     return _BootContextScope(
       bootContext: this,
-      child: child,
+      child: RootRestorationScope(
+        restorationId: "root",
+        child: child,
+      ),
     );
   }
 
   @override
   void changeThemeStyle(ThemeStyle value) {
     if (_themeStyle.value == value) return;
-
-    _themeData = ThemeAttrs.get(value);
     _themeStyle.value = value;
   }
-
 }
-
 
 class _BootContextScope extends InheritedWidget {
   const _BootContextScope({

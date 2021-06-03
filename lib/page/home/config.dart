@@ -12,6 +12,7 @@ import 'package:tencent_video/page/home/variety/variety.dart';
 
 import 'children/children.dart';
 class HomeConfigs {
+
   HomeConfigs._();
 
   static List<Widget> getViews(BuildContext context) {
@@ -25,12 +26,15 @@ class HomeConfigs {
       Children(),
       Cartoon(),
       Documentary(),
-      NBA(),
+      for (int i = 0; i < 10; i++)
+        NBA(),
     ];
   }
 
+  static int get length => 19;
+
   static List<Widget> getTabs(BuildContext context) {
-    return [
+     return [
       Tab(text: S.of(context).sub_txt),
       Tab(text: S.of(context).cho_txt),
       Tab(text: S.of(context).dis_txt),
@@ -40,8 +44,8 @@ class HomeConfigs {
       Tab(text: S.of(context).chi_txt),
       Tab(text: S.of(context).car_txt),
       Tab(text: S.of(context).doc_txt),
-      Tab(text: S.of(context).nba_txt),
+      for (int i = 0; i < 10; i++)
+        Tab(text: S.of(context).nba_txt),
     ];
   }
-
 }

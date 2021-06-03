@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:typed_data';
+
 typedef WidgetCallback<T> = Widget Function(Ob<T>);
 
 extension ObExtension<T> on T {
@@ -23,7 +22,6 @@ class Ob<T> with ChangeNotifier {
   }
 
   T? call([T? v]) {
-    print("dada: $v");
     if (v != null) {
       value = v;
     }
@@ -75,7 +73,6 @@ class _ObsWidgetState extends State<ObWidget> {
 
   void _rebuild() {
     setState(() {});
-    Color y = Colors.red;
   }
 
   @override

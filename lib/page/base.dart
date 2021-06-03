@@ -24,14 +24,17 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
     }
   }
 
+  @protected
   void changedPage() {}
 
+  @protected
   void changedThemeStyle() {}
 
+  @protected
   void updateBootContext(BootContext? oldBootContext) {}
 
-  bool isPage(PageCategory page) {
-    return bootContext.isPage(page);
+  bool isPageAt(PageCategory page) {
+    return bootContext.isPageAt(page);
   }
 
   void _removeListeners(BootContext? bootContext) {

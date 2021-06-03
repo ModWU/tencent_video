@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/home/config.dart';
+import 'package:tencent_video/page/home/teleplay/teleplay.dart';
 import 'package:tencent_video/resources/styles.dart';
 import '../boot_manager.dart';
 import '../base.dart';
@@ -10,31 +13,40 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends BaseState<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
   TabController? _tabController;
+
+  TabController? _tabViewController;
 
   ThemeStyle? themeStyle;
 
   int? _currentIndex;
 
-  double? positionOffset;
+  GlobalKey _tabBarKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(
+        initialIndex: _currentIndex = 1,
+        length: HomeConfigs.length,
+        vsync: this);
 
-    _tabController =
-        TabController(initialIndex: _currentIndex = 1, length: 10, vsync: this);
+    _tabViewController = TabController(
+        initialIndex: _currentIndex!, length: HomeConfigs.length, vsync: this);
 
     _tabController!.animation!.addListener(_changedTabPosition);
+    _tabViewController!.animation!.addListener(_changeTabViewPosition);
+
     themeStyle = ThemeStyle.normal;
   }
 
   @override
   void dispose() {
     _tabController!.animation!.removeListener(_changedTabPosition);
+    _tabViewController!.animation!.removeListener(_changeTabViewPosition);
     _tabController!.dispose();
+    _tabViewController!.dispose();
 
     _currentIndex = null;
     _tabController = null;
@@ -43,31 +55,71 @@ class _HomePageState extends BaseState<HomePage>
 
   @override
   void changedThemeStyle() {
-    if (isPage(PageCategory.home)) {
+    if (isPageAt(PageCategory.home)) {
+
       themeStyle = bootContext.themeStyle.value;
     }
   }
 
   @override
   void changedPage() {
-    if (isPage(PageCategory.home)) {
+    if (isPageAt(PageCategory.home)) {
       bootContext.changeThemeStyle(themeStyle!);
-      _tabController!.index = _currentIndex!;
+      final StatefulElement? element =
+          _tabBarKey.currentContext as StatefulElement;
+      final TabBarState? tabBarState = element?.state as TabBarState;
+      if (tabBarState != null) {
+        tabBarState.scrollToCurrentIndex();
+      }
     }
   }
 
-  void _updateScrollPosition(ScrollMetrics scrollMetrics) {
-    print("pixels: ${scrollMetrics.pixels}");
+  void _changeTabViewPosition() {
+    final tabViewIndex = _tabViewController!.animation!.value.round();
+
+    print("tabViewIndex: $tabViewIndex, _currentIndex: $_currentIndex");
+
+    if (tabViewIndex != _currentIndex) {
+      _changedTabIndex(tabViewIndex);
+      _waitingTabAnimationState();
+      _tabController!.animateTo(_currentIndex!);
+    }
+  }
+
+  void _waitingTabAnimationState() {
+    void animationStatusListener(AnimationStatus status) {
+      switch (status) {
+        case AnimationStatus.forward:
+          _tabController!.animation!.removeListener(_changedTabPosition);
+          break;
+
+        case AnimationStatus.completed:
+          _tabController!.animation!.removeListener(_changedTabPosition);
+          _tabController!.animation!.addListener(_changedTabPosition);
+          _tabController!.animation!
+              .removeStatusListener(animationStatusListener);
+          break;
+      }
+    }
+
+    _tabController!.animation!.removeStatusListener(animationStatusListener);
+    _tabController!.animation!.addStatusListener(animationStatusListener);
   }
 
   void _changedTabPosition() {
+    print("_changedTabPosition");
     final currentIndex = _tabController!.animation!.value.round();
     if (_tabController!.index != _currentIndex) {
       if (_tabController!.index == currentIndex) {
         _changedTabIndex(currentIndex);
+        //tabView没有任何动画，所以不需要移除动画监听
+        _tabViewController!.index = _currentIndex!;
+        //_tabViewController!.animateTo(_currentIndex!, duration: Duration(milliseconds: 5000), curve: Curves.ease);
       }
     } else if (currentIndex != _currentIndex) {
       _changedTabIndex(currentIndex);
+      _tabViewController!.index = _currentIndex!;
+      //_tabViewController!.animateTo(_currentIndex!, duration: Duration(milliseconds: 5000), curve: Curves.ease);
     }
   }
 
@@ -93,34 +145,21 @@ class _HomePageState extends BaseState<HomePage>
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
           ),
-          child: NotificationListener(
-            onNotification: (Notification notification) {
-              if (notification is ScrollUpdateNotification) {
-                final ScrollMetrics scrollMetrics = notification.metrics;
-                if (scrollMetrics.axis == Axis.horizontal) {
-                  _updateScrollPosition(scrollMetrics);
-                }
-              }
-              return false;
-            },
-            child: TabBar(
-              tabs: HomeConfigs.getTabs(context),
-              controller: _tabController,
-              physics: const BouncingScrollPhysics(),
-              //overlayColor: MaterialStateProperty.all(Colors.transparent),
-              labelPadding: EdgeInsets.symmetric(horizontal: 9.4),
-              indicatorWeight: 0,
-              indicator: const BoxDecoration(),
-              //labelPadding: EdgeInsets.only(top: 2),
-              isScrollable: true,
-            ),
+          child: TabBar(
+            key: _tabBarKey,
+            tabs: HomeConfigs.getTabs(context),
+            controller: _tabController,
+            physics: const BouncingScrollPhysics(),
+            indicatorWeight: 0,
+            indicator: const BoxDecoration(),
+            isScrollable: true,
           ),
         ),
       ),
       body: DefaultTextStyle(
         style: bootContext.bodyText,
         child: TabBarView(
-          controller: _tabController,
+          controller: _tabViewController,
           physics: const BouncingScrollPhysics(),
           children: HomeConfigs.getViews(context),
         ),

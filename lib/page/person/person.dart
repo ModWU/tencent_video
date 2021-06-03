@@ -24,7 +24,7 @@ class _PersonPageState extends BaseState<PersonPage> {
 
   @override
   void changedPage() {
-    if (isPage(PageCategory.person)) {
+    if (isPageAt(PageCategory.person)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }
   }

@@ -35,61 +35,60 @@ enum ThemeStyle {
 class ThemeAttrs {
   ThemeAttrs._();
 
-  static ThemeData _defaultThemeStyle() {
-    return ThemeData(
+  static final ThemeData defaultThemeStyle = ThemeData(
+    backgroundColor: ColorAttrs.lightBackgroundColor,
+    scaffoldBackgroundColor: ColorAttrs.lightBackgroundColor,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: ColorAttrs.lightBackgroundColor,
-      scaffoldBackgroundColor: ColorAttrs.lightBackgroundColor,
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: ColorAttrs.lightBackgroundColor,
-        selectedItemColor: ColorAttrs.home_nav_selected_light_color,
-        unselectedItemColor: ColorAttrs.home_nav_unselected_light_color,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        elevation: 4,
-        selectedLabelStyle: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-        ),
+      selectedItemColor: ColorAttrs.home_nav_selected_light_color,
+      unselectedItemColor: ColorAttrs.home_nav_unselected_light_color,
+      type: BottomNavigationBarType.fixed,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      elevation: 4,
+      selectedLabelStyle: TextStyle(
+        fontSize: 10,
+        fontWeight: FontWeight.w500,
       ),
-      tabBarTheme: TabBarTheme(
-        unselectedLabelColor: ColorAttrs.home_tab_unselected_light_color,
-        labelColor: ColorAttrs.home_tab_selected_light_color,
-        labelStyle: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 10,
+        fontWeight: FontWeight.w500,
       ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: ColorAttrs.lightBackgroundColor,
-        brightness: Brightness.light,
-        elevation: 0.4,
-        centerTitle: true,
-        titleTextStyle: TextStyle(
-          color: Colors.black,
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light,
-        ),
-        textTheme: TextTheme(
-          bodyText1: TextAttrs.home_light_body,
-          headline6: TextAttrs.home_light_headline6,
-        ),
+    ),
+    tabBarTheme: TabBarTheme(
+      unselectedLabelColor: ColorAttrs.home_tab_unselected_light_color,
+      labelColor: ColorAttrs.home_tab_selected_light_color,
+      labelPadding: EdgeInsets.symmetric(horizontal: 9.4),
+      labelStyle: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w500,
       ),
-    );
-  }
+      unselectedLabelStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: ColorAttrs.lightBackgroundColor,
+      brightness: Brightness.light,
+      elevation: 0.4,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+      ),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+      textTheme: TextTheme(
+        bodyText1: TextAttrs.home_light_body,
+        headline6: TextAttrs.home_light_headline6,
+      ),
+    ),
+  );
 
   static ThemeData get(ThemeStyle style) {
-    final ThemeData defaultThemeData = _defaultThemeStyle();
+    final ThemeData defaultThemeData = defaultThemeStyle;
     switch (style) {
       case ThemeStyle.light:
         return defaultThemeData;
