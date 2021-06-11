@@ -4,6 +4,9 @@ import '../base.dart';
 import '../boot_manager.dart';
 
 class MessagePage extends StatefulWidget {
+
+  MessagePage();
+
   @override
   State<StatefulWidget> createState() => _MessagePageState();
 }
@@ -12,10 +15,10 @@ class _MessagePageState extends BaseState<MessagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("title: message",),),
+      appBar: AppBar(title: const Text("title: message",),),
       body: DefaultTextStyle(
         style: bootContext.bodyText,
-        child: Center(
+        child: const Center(
           child: Text("message",),
         ),
       ),

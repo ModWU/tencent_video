@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tencent_video/common/listener/tap.dart';
 import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/person/person.dart';
 import 'package:tencent_video/page/vip/vip.dart';
 import 'package:tencent_video/resources/styles.dart';
 import 'package:tencent_video/ui/state/rive_state.dart';
-import 'boot_manager.dart';
 import 'base.dart';
+import 'boot_manager.dart';
 import 'doki/doki.dart';
 import 'home/home.dart';
 import 'message/message.dart';
@@ -23,14 +24,16 @@ class _BootState extends State<Boot> with BootManager {
   @override
   void initState() {
     super.initState();
-    _themeData = ThemeAttrs.get(ThemeStyle.normal);
+    _themeData = ThemeAttrs.get(themeStyle.value!);
     page.addListener(_rebuild);
+    locale.addListener(_rebuild);
     themeStyle.addListener(_changedThemeStyle);
   }
 
   @override
   void dispose() {
     page.removeListener(_rebuild);
+    locale.removeListener(_rebuild);
     themeStyle.removeListener(_changedThemeStyle);
     _themeData = null;
     super.dispose();
@@ -49,13 +52,25 @@ class _BootState extends State<Boot> with BootManager {
   @override
   Widget build(BuildContext context) {
     return startBoot(
-      child: Theme(
-        data: themeData,
-        child: Scaffold(
-          bottomNavigationBar: _BottomNavigationBarWidget(),
+      child: MaterialApp(
+        localizationsDelegates: _delegates,
+        supportedLocales: S.delegate.supportedLocales,
+        locale: locale.value,
+        localeListResolutionCallback:
+            (List<Locale>? locales, Iterable<Locale> supportedLocales) {
+          if (locales != null && locales.isNotEmpty) {
+            for (final Locale locale in locales) {
+              if (S.delegate.isSupported(locale)) return locale;
+            }
+          }
+          return S.delegate.supportedLocales[0];
+        },
+        theme: themeData,
+        home: Scaffold(
+          bottomNavigationBar: const _BottomNavigationBarWidget(),
           body: IndexedStack(
             index: page.value!.index,
-            children: [
+            children: <Widget>[
               HomePage(),
               DokiPage(),
               VipPage(),
@@ -88,7 +103,7 @@ class _BottomNavigationBarWidgetState
 
   @override
   void updateBootContext(BootContext? oldBootContext) {
-    _pageTapListener = new TapListener(bootContext.page.value!);
+    _pageTapListener = TapListener(bootContext.page.value!);
   }
 
   @override
@@ -111,7 +126,7 @@ class _BottomNavigationBarWidgetState
         splashColor: Colors.transparent,
       ),
       child: BottomNavigationBar(
-        items: [
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: _getRiveIcon(PageCategory.home, 20),
               tooltip: '',
@@ -146,44 +161,53 @@ class _BottomNavigationBarWidgetState
     switch (page) {
       case PageCategory.home:
         return RiveSimpleStateMachineWidget(
-            uri: "assets/mr-help.riv",
-            stateMachineName: "State Machine 1",
-            input: "Wrong",
+            uri: 'assets/mr-help.riv',
+            stateMachineName: 'State Machine 1',
+            input: 'Wrong',
             size: size,
             tapListener: _pageTapListener!,
             value: PageCategory.home);
       case PageCategory.doki:
         return RiveSimpleWidget(
-            uri: "assets/landing-animation.riv",
-            animationName: "Landing",
+            uri: 'assets/landing-animation.riv',
+            animationName: 'Landing',
             size: size,
             useArtboardSize: true,
             tapListener: _pageTapListener!,
             value: PageCategory.doki);
       case PageCategory.vip:
         return RiveSimpleStateMachineWidget(
-            uri: "assets/mr-help.riv",
-            stateMachineName: "State Machine 1",
-            input: "Speak",
+            uri: 'assets/mr-help.riv',
+            stateMachineName: 'State Machine 1',
+            input: 'Speak',
             size: size,
             tapListener: _pageTapListener!,
             value: PageCategory.vip);
       case PageCategory.message:
         return RiveSimpleStateMachineWidget(
-            uri: "assets/mr-help.riv",
-            stateMachineName: "State Machine 1",
-            input: "Speak",
+            uri: 'assets/mr-help.riv',
+            stateMachineName: 'State Machine 1',
+            input: 'Speak',
             size: size,
             tapListener: _pageTapListener!,
             value: PageCategory.message);
       case PageCategory.person:
         return RiveSimpleStateMachineWidget(
-            uri: "assets/mr-help.riv",
-            stateMachineName: "State Machine 1",
-            input: "Happy",
+            uri: 'assets/mr-help.riv',
+            stateMachineName: 'State Machine 1',
+            input: 'Happy',
             size: size,
             tapListener: _pageTapListener!,
             value: PageCategory.person);
     }
   }
 }
+
+const List<LocalizationsDelegate<dynamic>> _delegates =
+    <LocalizationsDelegate<dynamic>>[
+  /*GlobalCupertinoLocalizations.delegate,
+  GlobalMaterialLocalizations.delegate,
+  GlobalWidgetsLocalizations.delegate,*/
+  ...GlobalMaterialLocalizations.delegates,
+  S.delegate,
+];

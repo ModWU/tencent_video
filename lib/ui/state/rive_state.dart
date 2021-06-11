@@ -4,15 +4,6 @@ import 'package:rive/rive.dart';
 import 'package:tencent_video/common/listener/tap.dart';
 
 class RiveSimpleStateMachineWidget extends StatefulWidget {
-  final TapListener tapListener;
-  final String uri;
-  final Object? value;
-  final String input;
-  final double size;
-  final BoxFit fit;
-  final Alignment alignment;
-  final bool useArtboardSize;
-  final String stateMachineName;
 
   const RiveSimpleStateMachineWidget({
     required this.uri,
@@ -25,6 +16,17 @@ class RiveSimpleStateMachineWidget extends StatefulWidget {
     required this.input,
     required this.stateMachineName,
   }) : assert(size > 0);
+
+  final TapListener tapListener;
+  final String uri;
+  final Object? value;
+  final String input;
+  final double size;
+  final BoxFit fit;
+  final Alignment alignment;
+  final bool useArtboardSize;
+  final String stateMachineName;
+
   @override
   State<StatefulWidget> createState() => _RiveSimpleStateMachineWidgetState();
 }
@@ -34,36 +36,36 @@ class _RiveSimpleStateMachineWidgetState extends State<RiveSimpleStateMachineWid
   late bool active;
 
   Artboard? _riveArtboard;
-  //StateMachineController? _controller;
+  //late StateMachineController<RuntimeArtboard> _controller;
   SMIInput<bool>? _input;
 
   @override
   void initState() {
     super.initState();
-    active = (widget.value == widget.tapListener.value);
+    active = widget.value == widget.tapListener.value;
     currentValue = widget.tapListener.value;
     widget.tapListener.addListener(_onTap);
 
     rootBundle.load(widget.uri).then(
-      (data) async {
+      (ByteData data) async {
         // Load the RiveFile from the binary data.
-        final file = RiveFile.import(data);
+        final RiveFile file = RiveFile.import(data);
 
         // The artboard is the root of the animation and gets drawn in the
         // Rive widget.
         final Artboard artboard = file.mainArtboard;
 
-        for (final animation in artboard.animations) {
-          print("animation name: ${animation.name}, animation is StateMachine: ${animation is StateMachine}");
-        }
+       /* for (final animation in artboard.animations) {
+          print('animation name: ${animation.name}, animation is StateMachine: ${animation is StateMachine}');
+        }*/
 
-        var controller =
+        final StateMachineController? controller =
             StateMachineController.fromArtboard(artboard, widget.stateMachineName);
-        print("initstate=> ${widget.value} => controller: $controller");
+        print('initstate=> ${widget.value} => controller: $controller');
         if (controller != null) {
           artboard.addController(controller);
           _input = controller.findInput(widget.input);
-          print("initstate=> ${widget.value} => _input: $_input");
+          print('initstate=> ${widget.value} => _input: $_input');
           _input!.value = active;
         }
         setState(() => _riveArtboard = artboard);
@@ -99,15 +101,15 @@ class _RiveSimpleStateMachineWidgetState extends State<RiveSimpleStateMachineWid
 
   void _onTap() {
     if (widget.tapListener.value == widget.value) {
-      print("被点击 active: $active");
+      print('被点击 active: $active');
       //点击状态
       if (!active) {
         _input!.value = active = true;
       }
-      print("被点击 value: ${widget.value}");
+      print('被点击 value: ${widget.value}');
     } else if (currentValue == widget.value) {
       //消失状态
-      print("消失点击 value: ${widget.value}");
+      print('消失点击 value: ${widget.value}');
       _input!.value = active = false;
     }
 
@@ -134,14 +136,6 @@ class _RiveSimpleStateMachineWidgetState extends State<RiveSimpleStateMachineWid
 
 
 class RiveSimpleWidget extends StatefulWidget {
-  final TapListener tapListener;
-  final String uri;
-  final Object? value;
-  final double size;
-  final BoxFit fit;
-  final Alignment alignment;
-  final bool useArtboardSize;
-  final String animationName;
 
   const RiveSimpleWidget({
     required this.uri,
@@ -153,36 +147,47 @@ class RiveSimpleWidget extends StatefulWidget {
     this.alignment = Alignment.center,
     required this.animationName,
   }) : assert(size > 0);
+
+  final TapListener tapListener;
+  final String uri;
+  final Object? value;
+  final double size;
+  final BoxFit fit;
+  final Alignment alignment;
+  final bool useArtboardSize;
+  final String animationName;
+
   @override
   State<StatefulWidget> createState() => _RiveSimpleWidgetState();
 }
 
 class _RiveSimpleWidgetState extends State<RiveSimpleWidget> {
+
   Object? currentValue;
   late bool active;
 
   Artboard? _riveArtboard;
-  RiveAnimationController? _controller;
+  late RiveAnimationController<RuntimeArtboard> _controller;
 
   @override
   void initState() {
     super.initState();
-    active = (widget.value == widget.tapListener.value);
+    active = widget.value == widget.tapListener.value;
     currentValue = widget.tapListener.value;
     widget.tapListener.addListener(_onTap);
 
     rootBundle.load(widget.uri).then(
-          (data) async {
+          (ByteData data) async {
         // Load the RiveFile from the binary data.
-        final file = RiveFile.import(data);
+        final RiveFile file = RiveFile.import(data);
 
-        final artboard = file.mainArtboard;
+        final Artboard artboard = file.mainArtboard;
         // Add a controller to play back a known animation on the main/default
         // artboard. We store a reference to it so we can toggle playback.
         artboard.addController(_controller = SimpleAnimation(widget.animationName));
         setState(() => _riveArtboard = artboard);
-        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-            _controller!.isActive = active;
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+            _controller.isActive = active;
         });
       },
     );
@@ -204,11 +209,11 @@ class _RiveSimpleWidgetState extends State<RiveSimpleWidget> {
 
       if (widget.tapListener.value != widget.value) {
         if (active) {
-          _controller!.isActive = false;
+          _controller.isActive = false;
         }
       } else {
         if (!active) {
-          _controller!.isActive = true;
+          _controller.isActive = true;
         }
       }
     }
@@ -216,16 +221,16 @@ class _RiveSimpleWidgetState extends State<RiveSimpleWidget> {
 
   void _onTap() {
     if (widget.tapListener.value == widget.value) {
-      print("被点击 active: $active");
+      print('被点击 active: $active');
       //点击状态
       if (!active) {
-        _controller!.isActive = active = true;
+        _controller.isActive = active = true;
       }
-      print("被点击 value: ${widget.value}");
+      print('被点击 value: ${widget.value}');
     } else if (currentValue == widget.value) {
       //消失状态
-      print("消失点击 value: ${widget.value}");
-      _controller!.isActive = active = false;
+      print('消失点击 value: ${widget.value}');
+      _controller.isActive = active = false;
     }
 
     currentValue = widget.tapListener.value;

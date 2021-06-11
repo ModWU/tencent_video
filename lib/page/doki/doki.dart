@@ -4,6 +4,7 @@ import '../boot_manager.dart';
 import '../base.dart';
 
 class DokiPage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() => _DokiPageState();
 }
@@ -14,10 +15,10 @@ class _DokiPageState extends BaseState<DokiPage> {
     print("doki build");
     final ThemeData localTheme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text("title: doki",),),
+      appBar: AppBar(title: const Text("title: doki",),),
       body: DefaultTextStyle(
         style: bootContext.bodyText,
-        child: Center(
+        child: const Center(
           child: Text("doki",),
         ),
       ),

@@ -4,6 +4,9 @@ import '../base.dart';
 import '../boot_manager.dart';
 
 class VipPage extends StatefulWidget {
+
+  VipPage();
+
   @override
   State<StatefulWidget> createState() => _VipPageState();
 }
@@ -12,10 +15,10 @@ class _VipPageState extends BaseState<VipPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("title: vip",),),
+      appBar: AppBar(title: const Text("title: vip",),),
       body: DefaultTextStyle(
         style: bootContext.bodyText,
-        child: Center(
+        child: const Center(
           child: Text("vip",),
         ),
       ),

@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'dart:math' as Math;
 
 typedef PerpendicularEquation = Point<double> Function({double? x, double? y});
 
@@ -34,7 +32,7 @@ enum TriangleArrowDirection {
 }
 
 class TriangleArrowDecoration extends Decoration {
-  TriangleArrowDecoration({
+  const TriangleArrowDecoration({
     this.arrowWidth = 8,
     this.arrowHeight = 8,
     this.arrowOffset = 0,
@@ -240,7 +238,7 @@ class TriangleArrowDecoration extends Decoration {
       case TriangleArrowDirection.bottomRight:
         double accessHeight = rect.size.height;
         if (borderRadius != null) {
-          final double maxInvalidLength = Math.max(
+          final double maxInvalidLength = max(
               borderRadius.topLeft.y + borderRadius.bottomLeft.y,
               borderRadius.topRight.y + borderRadius.bottomRight.y);
           accessHeight -= maxInvalidLength;
@@ -257,7 +255,7 @@ class TriangleArrowDecoration extends Decoration {
       case TriangleArrowDirection.rightBottom:
         double accessHeight = rect.size.width;
         if (borderRadius != null) {
-          final double maxInvalidLength = Math.max(
+          final double maxInvalidLength = max(
               borderRadius.topLeft.x + borderRadius.topRight.x,
               borderRadius.bottomLeft.x + borderRadius.bottomRight.x);
           accessHeight -= maxInvalidLength;
@@ -422,13 +420,13 @@ class TriangleArrowPainter extends BoxPainter {
     return _cachedBackgroundPaint!;
   }
 
-  Point _getCenterPoint(Point p1, Point p2) {
-    return Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+  Point<double> _getCenterPoint(Point<double> p1, Point<double> p2) {
+    return Point<double>((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
   }
 
-  PerpendicularEquation? perpendicular(Point p1, Point p2) {
+  PerpendicularEquation? perpendicular(Point<double> p1, Point<double> p2) {
     final double pSlope = (p2.y - p1.y) / (p2.x - p1.x);
-    final Point pM = _getCenterPoint(p1, p2);
+    final Point<double> pM = _getCenterPoint(p1, p2);
     if (pSlope == double.infinity) {
       //斜率为无穷大，p与y轴平行;即y的垂直平分线l与x轴平行，即 l.y = pM.y
       return null;
@@ -438,17 +436,17 @@ class TriangleArrowPainter extends BoxPainter {
     }
 
     //负倒数
-    double _pSlope = (p2.x - p1.x) / (p2.y - p1.y) * -1;
+    final double _pSlope = (p2.x - p1.x) / (p2.y - p1.y) * -1;
 
     // y = _pSlope * x + b;
-    double b = pM.y - _pSlope * pM.x;
+    final double b = pM.y - _pSlope * pM.x;
 
     // 公式：y = _pSlope * x + b
     return ({double? x, double? y}) {
       assert((x == null && y != null) || (y == null && x != null));
       return x != null
-          ? Point(x, _pSlope * x + b)
-          : Point((y! - b) / _pSlope, y);
+          ? Point<double>(x, _pSlope * x + b)
+          : Point<double>((y! - b) / _pSlope, y);
     };
   }
 
@@ -457,7 +455,7 @@ class TriangleArrowPainter extends BoxPainter {
     assert((offsetX == null && offsetY != null) ||
         (offsetX != null && offsetY == null));
 
-    final Point center = _getCenterPoint(p1, p2);
+    final Point<double> center = _getCenterPoint(p1, p2);
     final PerpendicularEquation equation = perpendicular(p1, p2)!;
 
     return equation(
@@ -479,7 +477,7 @@ class TriangleArrowPainter extends BoxPainter {
       case TriangleArrowDirection.topLeft:
       case TriangleArrowDirection.topCenter:
       case TriangleArrowDirection.topRight:
-        Path path = Path();
+        final Path path = Path();
         path.moveTo(arrowLeft.x, arrowLeft.y);
 
         path.lineTo(rect.left + borderRadius.topLeft.x, arrowLeft.y);
@@ -512,15 +510,15 @@ class TriangleArrowPainter extends BoxPainter {
         Point<double> arrowCenterRightTop = arrowCenterTop;
 
         if (_decoration.arrowSmoothness > 0) {
-          arrowCenterLeftTop = Point(
+          arrowCenterLeftTop = Point<double>(
               arrowCenterTop.x - _decoration.arrowSmoothness,
               arrowCenterTop.y + _decoration.arrowSmoothness);
-          arrowCenterRightTop = Point(
+          arrowCenterRightTop = Point<double>(
               arrowCenterTop.x + _decoration.arrowSmoothness,
               arrowCenterTop.y + _decoration.arrowSmoothness);
         }
 
-        Point<double> rightControlPoint = _getCenterControlPoint(
+        final Point<double> rightControlPoint = _getCenterControlPoint(
             arrowRight, arrowCenterRightTop,
             offsetX: _decoration.arrowBreadth);
         path.quadraticBezierTo(rightControlPoint.x, rightControlPoint.y,
@@ -530,7 +528,7 @@ class TriangleArrowPainter extends BoxPainter {
           path.quadraticBezierTo(arrowCenterTop.x, arrowCenterTop.y,
               arrowCenterLeftTop.x, arrowCenterLeftTop.y);
 
-        Point<double> leftControlPoint = _getCenterControlPoint(
+        final Point<double> leftControlPoint = _getCenterControlPoint(
             arrowLeft, arrowCenterLeftTop,
             offsetX: -_decoration.arrowBreadth);
         path.quadraticBezierTo(
@@ -542,7 +540,7 @@ class TriangleArrowPainter extends BoxPainter {
       case TriangleArrowDirection.bottomLeft:
       case TriangleArrowDirection.bottomCenter:
       case TriangleArrowDirection.bottomRight:
-        Path path = Path();
+        final Path path = Path();
         path.moveTo(arrowLeft.x, arrowLeft.y);
 
         path.lineTo(rect.right - borderRadius.topLeft.x, arrowLeft.y);
@@ -575,15 +573,15 @@ class TriangleArrowPainter extends BoxPainter {
         Point<double> arrowCenterRightTop = arrowCenterTop;
 
         if (_decoration.arrowSmoothness > 0) {
-          arrowCenterLeftTop = Point(
+          arrowCenterLeftTop = Point<double>(
               arrowCenterTop.x + _decoration.arrowSmoothness,
               arrowCenterTop.y - _decoration.arrowSmoothness);
-          arrowCenterRightTop = Point(
+          arrowCenterRightTop = Point<double>(
               arrowCenterTop.x - _decoration.arrowSmoothness,
               arrowCenterTop.y - _decoration.arrowSmoothness);
         }
 
-        Point<double> rightControlPoint = _getCenterControlPoint(
+        final Point<double> rightControlPoint = _getCenterControlPoint(
             arrowRight, arrowCenterRightTop,
             offsetX: -_decoration.arrowBreadth);
         path.quadraticBezierTo(rightControlPoint.x, rightControlPoint.y,
@@ -593,7 +591,7 @@ class TriangleArrowPainter extends BoxPainter {
           path.quadraticBezierTo(arrowCenterTop.x, arrowCenterTop.y,
               arrowCenterLeftTop.x, arrowCenterLeftTop.y);
 
-        Point<double> leftControlPoint = _getCenterControlPoint(
+        final Point<double> leftControlPoint = _getCenterControlPoint(
             arrowLeft, arrowCenterLeftTop,
             offsetX: _decoration.arrowBreadth);
         path.quadraticBezierTo(
@@ -605,7 +603,7 @@ class TriangleArrowPainter extends BoxPainter {
       case TriangleArrowDirection.leftTop:
       case TriangleArrowDirection.leftCenter:
       case TriangleArrowDirection.leftBottom:
-        Path path = Path();
+        final Path path = Path();
         path.moveTo(arrowLeft.x, arrowLeft.y);
 
         path.lineTo(arrowLeft.x, rect.bottom - borderRadius.topLeft.x);
@@ -638,15 +636,15 @@ class TriangleArrowPainter extends BoxPainter {
         Point<double> arrowCenterRightTop = arrowCenterTop;
 
         if (_decoration.arrowSmoothness > 0) {
-          arrowCenterLeftTop = Point(
+          arrowCenterLeftTop = Point<double>(
               arrowCenterTop.x + _decoration.arrowSmoothness,
               arrowCenterTop.y + _decoration.arrowSmoothness);
-          arrowCenterRightTop = Point(
+          arrowCenterRightTop = Point<double>(
               arrowCenterTop.x + _decoration.arrowSmoothness,
               arrowCenterTop.y - _decoration.arrowSmoothness);
         }
 
-        Point<double> rightControlPoint = _getCenterControlPoint(
+        final Point<double> rightControlPoint = _getCenterControlPoint(
             arrowRight, arrowCenterRightTop,
             offsetY: -_decoration.arrowBreadth);
         path.quadraticBezierTo(rightControlPoint.x, rightControlPoint.y,
@@ -656,7 +654,7 @@ class TriangleArrowPainter extends BoxPainter {
           path.quadraticBezierTo(arrowCenterTop.x, arrowCenterTop.y,
               arrowCenterLeftTop.x, arrowCenterLeftTop.y);
 
-        Point<double> leftControlPoint = _getCenterControlPoint(
+        final Point<double> leftControlPoint = _getCenterControlPoint(
             arrowLeft, arrowCenterLeftTop,
             offsetY: _decoration.arrowBreadth);
         path.quadraticBezierTo(
@@ -667,7 +665,7 @@ class TriangleArrowPainter extends BoxPainter {
       case TriangleArrowDirection.rightTop:
       case TriangleArrowDirection.rightCenter:
       case TriangleArrowDirection.rightBottom:
-        Path path = Path();
+        final Path path = Path();
         path.moveTo(arrowLeft.x, arrowLeft.y);
 
         path.lineTo(arrowLeft.x, rect.top + borderRadius.topLeft.x);
@@ -700,15 +698,15 @@ class TriangleArrowPainter extends BoxPainter {
         Point<double> arrowCenterRightTop = arrowCenterTop;
 
         if (_decoration.arrowSmoothness > 0) {
-          arrowCenterLeftTop = Point(
+          arrowCenterLeftTop = Point<double>(
               arrowCenterTop.x - _decoration.arrowSmoothness,
               arrowCenterTop.y - _decoration.arrowSmoothness);
-          arrowCenterRightTop = Point(
+          arrowCenterRightTop = Point<double>(
               arrowCenterTop.x - _decoration.arrowSmoothness,
               arrowCenterTop.y + _decoration.arrowSmoothness);
         }
 
-        Point<double> rightControlPoint = _getCenterControlPoint(
+        final Point<double> rightControlPoint = _getCenterControlPoint(
             arrowRight, arrowCenterRightTop,
             offsetY: _decoration.arrowBreadth);
         path.quadraticBezierTo(rightControlPoint.x, rightControlPoint.y,
@@ -718,7 +716,7 @@ class TriangleArrowPainter extends BoxPainter {
           path.quadraticBezierTo(arrowCenterTop.x, arrowCenterTop.y,
               arrowCenterLeftTop.x, arrowCenterLeftTop.y);
 
-        Point<double> leftControlPoint = _getCenterControlPoint(
+        final Point<double> leftControlPoint = _getCenterControlPoint(
             arrowLeft, arrowCenterLeftTop,
             offsetY: -_decoration.arrowBreadth);
         path.quadraticBezierTo(
@@ -749,17 +747,17 @@ class TriangleArrowPainter extends BoxPainter {
 
     switch (_decoration.triangleArrowDirection) {
       case TriangleArrowDirection.topLeft:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.left +
                 _decoration.arrowWidth / 2 +
                 borderRadius.topLeft.x +
                 _decoration.arrowOffset,
             rect.top);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x - _decoration.arrowWidth / 2,
             rect.top + _decoration.arrowHeight);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x + _decoration.arrowWidth / 2,
             rect.top + _decoration.arrowHeight);
 
@@ -780,12 +778,12 @@ class TriangleArrowPainter extends BoxPainter {
             (rect.width - topLeftX - topRightX) * 0.5 +
             _decoration.arrowOffset;
 
-        final Point<double> arrowCenterTop = Point(centerX, rect.top);
+        final Point<double> arrowCenterTop = Point<double>(centerX, rect.top);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x - _decoration.arrowWidth / 2,
             rect.top + _decoration.arrowHeight);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x + _decoration.arrowWidth / 2,
             rect.top + _decoration.arrowHeight);
 
@@ -797,17 +795,17 @@ class TriangleArrowPainter extends BoxPainter {
             textDirection: textDirection);
 
       case TriangleArrowDirection.topRight:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.right -
                 borderRadius.topRight.x -
                 _decoration.arrowWidth / 2 -
                 _decoration.arrowOffset,
             rect.top);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x - _decoration.arrowWidth / 2,
             rect.top + _decoration.arrowHeight);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x + _decoration.arrowWidth / 2,
             rect.top + _decoration.arrowHeight);
 
@@ -819,17 +817,17 @@ class TriangleArrowPainter extends BoxPainter {
             textDirection: textDirection);
 
       case TriangleArrowDirection.bottomLeft:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.left +
                 borderRadius.bottomLeft.x +
                 _decoration.arrowWidth / 2 +
                 _decoration.arrowOffset,
             rect.bottom);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x + _decoration.arrowWidth / 2,
             rect.bottom - _decoration.arrowHeight);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x - _decoration.arrowWidth / 2,
             rect.bottom - _decoration.arrowHeight);
 
@@ -849,12 +847,12 @@ class TriangleArrowPainter extends BoxPainter {
             (rect.width - topLeftX - topRightX) * 0.5 -
             _decoration.arrowOffset;
 
-        final Point<double> arrowCenterTop = Point(centerX, rect.bottom);
+        final Point<double> arrowCenterTop = Point<double>(centerX, rect.bottom);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x + _decoration.arrowWidth / 2,
             rect.bottom - _decoration.arrowHeight);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x - _decoration.arrowWidth / 2,
             rect.bottom - _decoration.arrowHeight);
 
@@ -866,17 +864,17 @@ class TriangleArrowPainter extends BoxPainter {
             textDirection: textDirection);
 
       case TriangleArrowDirection.bottomRight:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.right -
                 borderRadius.bottomLeft.x -
                 _decoration.arrowWidth / 2 -
                 _decoration.arrowOffset,
             rect.bottom);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x + _decoration.arrowWidth / 2,
             rect.bottom - _decoration.arrowHeight);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x - _decoration.arrowWidth / 2,
             rect.bottom - _decoration.arrowHeight);
 
@@ -888,17 +886,17 @@ class TriangleArrowPainter extends BoxPainter {
             textDirection: textDirection);
 
       case TriangleArrowDirection.leftTop:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.left,
             rect.top +
                 _decoration.arrowWidth / 2 +
                 borderRadius.topRight.x +
                 _decoration.arrowOffset);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             rect.left + _decoration.arrowHeight,
             arrowCenterTop.y + _decoration.arrowWidth / 2);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             rect.left + _decoration.arrowHeight,
             arrowCenterTop.y - _decoration.arrowWidth / 2);
 
@@ -918,12 +916,12 @@ class TriangleArrowPainter extends BoxPainter {
             (rect.height - topLeftX - topRightX) * 0.5 -
             _decoration.arrowOffset;
 
-        final Point<double> arrowCenterTop = Point(rect.left, centerX);
+        final Point<double> arrowCenterTop = Point<double>(rect.left, centerX);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x + _decoration.arrowHeight,
             arrowCenterTop.y + _decoration.arrowWidth / 2);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x + _decoration.arrowHeight,
             arrowCenterTop.y - _decoration.arrowWidth / 2);
 
@@ -934,17 +932,17 @@ class TriangleArrowPainter extends BoxPainter {
             arrowRight: arrowRight,
             textDirection: textDirection);
       case TriangleArrowDirection.leftBottom:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.left,
             rect.bottom -
                 _decoration.arrowWidth / 2 -
                 borderRadius.topLeft.x -
                 _decoration.arrowOffset);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             rect.left + _decoration.arrowHeight,
             arrowCenterTop.y + _decoration.arrowWidth / 2);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             rect.left + _decoration.arrowHeight,
             arrowCenterTop.y - _decoration.arrowWidth / 2);
 
@@ -956,17 +954,17 @@ class TriangleArrowPainter extends BoxPainter {
             textDirection: textDirection);
 
       case TriangleArrowDirection.rightTop:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.right,
             rect.top +
                 _decoration.arrowWidth / 2 +
                 borderRadius.topLeft.x +
                 _decoration.arrowOffset);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             rect.right - _decoration.arrowHeight,
             arrowCenterTop.y - _decoration.arrowWidth / 2);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             rect.right - _decoration.arrowHeight,
             arrowCenterTop.y + _decoration.arrowWidth / 2);
 
@@ -987,12 +985,12 @@ class TriangleArrowPainter extends BoxPainter {
             (rect.height - topLeftX - topRightX) * 0.5 +
             _decoration.arrowOffset;
 
-        final Point<double> arrowCenterTop = Point(rect.right, centerX);
+        final Point<double> arrowCenterTop = Point<double>(rect.right, centerX);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             arrowCenterTop.x - _decoration.arrowHeight,
             arrowCenterTop.y - _decoration.arrowWidth / 2);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             arrowCenterTop.x - _decoration.arrowHeight,
             arrowCenterTop.y + _decoration.arrowWidth / 2);
 
@@ -1004,17 +1002,17 @@ class TriangleArrowPainter extends BoxPainter {
             textDirection: textDirection);
 
       case TriangleArrowDirection.rightBottom:
-        final Point<double> arrowCenterTop = Point(
+        final Point<double> arrowCenterTop = Point<double>(
             rect.right,
             rect.bottom -
                 _decoration.arrowWidth / 2 -
                 borderRadius.topLeft.x -
                 _decoration.arrowOffset);
 
-        final Point<double> arrowLeft = Point(
+        final Point<double> arrowLeft = Point<double>(
             rect.right - _decoration.arrowHeight,
             arrowCenterTop.y - _decoration.arrowWidth / 2);
-        final Point<double> arrowRight = Point(
+        final Point<double> arrowRight = Point<double>(
             rect.right - _decoration.arrowHeight,
             arrowCenterTop.y + _decoration.arrowWidth / 2);
 
@@ -1025,8 +1023,6 @@ class TriangleArrowPainter extends BoxPainter {
             arrowRight: arrowRight,
             textDirection: textDirection);
     }
-
-    return null;
   }
 
   void _paintBox(
@@ -1076,7 +1072,7 @@ class TriangleArrowPainter extends BoxPainter {
   }
 
   //边框暂时不实现,比较复杂,等有需求再弄
-  void _paintBorder(Canvas canvas, Rect rect, textDirection) {
+  /*void _paintBorder(Canvas canvas, Rect rect, textDirection) {
     assert(textDirection != null);
     assert(_decoration.border != null);
     final BoxBorder border = _decoration.border!;
@@ -1102,7 +1098,7 @@ class TriangleArrowPainter extends BoxPainter {
           return;
       }
     }
-  }
+  }*/
 
   /// Paint the box decoration into the given location on the given canvas.
   @override

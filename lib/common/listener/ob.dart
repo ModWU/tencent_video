@@ -7,9 +7,10 @@ extension ObExtension<T> on T {
 }
 
 class Ob<T> with ChangeNotifier {
-  T? _value;
 
   Ob(this._value);
+
+  T? _value;
 
   T? get value => _value;
 
@@ -29,33 +30,35 @@ class Ob<T> with ChangeNotifier {
   }
 
   @override
-  bool operator ==(dynamic o) {
-    if (o is T) return value == o;
-    if (o is Ob<T>) return value == o.value;
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(dynamic other) {
+    if (other is T) return value == other;
+    if (other is Ob<T>) return value == other.value;
     return false;
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _value.hashCode;
 }
 
 class ObWidget<T> extends StatefulWidget {
+  const ObWidget({required this.builder, required this.initialValue});
+
   final Ob<T> initialValue;
   final WidgetCallback<T> builder;
 
-  const ObWidget({required this.builder, required this.initialValue});
-
-  Widget _buildWidget(Ob data) {
+  Widget _buildWidget(dynamic data) {
     return builder(data as Ob<T>);
   }
 
   @override
-  State<StatefulWidget> createState() => _ObsWidgetState();
+  State<StatefulWidget> createState() => _ObsWidgetState<T>();
 }
 
-class _ObsWidgetState extends State<ObWidget> {
+class _ObsWidgetState<T> extends State<ObWidget<T>> {
 
-  Ob? _data;
+  Ob<T>? _data;
 
   @override
   void initState() {

@@ -4,6 +4,7 @@ import '../base.dart';
 import '../boot_manager.dart';
 
 class PersonPage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() => _PersonPageState();
 }
@@ -12,10 +13,10 @@ class _PersonPageState extends BaseState<PersonPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("title: person",),),
+      appBar: AppBar(title: const Text("title: person",),),
       body: DefaultTextStyle(
         style: bootContext.bodyText,
-        child: Center(
+        child: const Center(
           child: Text("person",),
         ),
       ),

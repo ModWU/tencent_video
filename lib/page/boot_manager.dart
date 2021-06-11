@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/ob.dart';
+import 'package:tencent_video/resources/languages.dart';
+import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/resources/styles.dart';
 
 enum PageCategory {
@@ -13,7 +15,10 @@ enum PageCategory {
 abstract class BootContext {
   Ob<PageCategory> get page;
   Ob<ThemeStyle> get themeStyle;
+  Ob<Locale> get locale;
+
   void changeThemeStyle(ThemeStyle value);
+  void changeLanguage(String? languageCode);
 
   bool isPageAt(PageCategory page);
   TextStyle get bodyText;
@@ -27,9 +32,11 @@ abstract class BootContext {
 }
 
 mixin BootManager implements BootContext {
-  Ob<PageCategory> _page = PageCategory.home.ob;
+  final Ob<PageCategory> _page = PageCategory.home.ob;
 
-  Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
+  final Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
+
+  final Ob<Locale> _locale = Ob<Locale>(null);
 
   @override
   bool isPageAt(PageCategory page) {
@@ -42,11 +49,14 @@ mixin BootManager implements BootContext {
   @override
   Ob<ThemeStyle> get themeStyle => _themeStyle;
 
+  @override
+  Ob<Locale> get locale => _locale;
+
   Widget startBoot({required Widget child}) {
     return _BootContextScope(
       bootContext: this,
       child: RootRestorationScope(
-        restorationId: "root",
+        restorationId: 'root',
         child: child,
       ),
     );
@@ -54,8 +64,14 @@ mixin BootManager implements BootContext {
 
   @override
   void changeThemeStyle(ThemeStyle value) {
-    if (_themeStyle.value == value) return;
     _themeStyle.value = value;
+  }
+
+  @override
+  void changeLanguage(String? value) {
+    final Locale? locale =
+        value != null ? Locale.fromSubtags(languageCode: value) : null;
+    _locale.value = locale;
   }
 }
 

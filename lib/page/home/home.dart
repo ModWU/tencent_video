@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/home/config.dart';
-import 'package:tencent_video/page/home/teleplay/teleplay.dart';
 import 'package:tencent_video/resources/styles.dart';
-import '../boot_manager.dart';
 import '../base.dart';
+import '../boot_manager.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,7 +19,7 @@ class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
 
   int? _currentIndex;
 
-  GlobalKey _tabBarKey = GlobalKey();
+  final GlobalKey _tabBarKey = GlobalKey();
 
   @override
   void initState() {
@@ -56,7 +53,6 @@ class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
   @override
   void changedThemeStyle() {
     if (isPageAt(PageCategory.home)) {
-
       themeStyle = bootContext.themeStyle.value;
     }
   }
@@ -65,19 +61,19 @@ class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
   void changedPage() {
     if (isPageAt(PageCategory.home)) {
       bootContext.changeThemeStyle(themeStyle!);
-      final StatefulElement? element =
-          _tabBarKey.currentContext as StatefulElement;
-      final TabBarState? tabBarState = element?.state as TabBarState;
+     /* final StatefulElement? element =
+          _tabBarKey.currentContext as StatefulElement?;
+      final TabBarState? tabBarState = element?.state as TabBarState?;
       if (tabBarState != null) {
         tabBarState.scrollToCurrentIndex();
-      }
+      }*/
     }
   }
 
   void _changeTabViewPosition() {
-    final tabViewIndex = _tabViewController!.animation!.value.round();
+    final int tabViewIndex = _tabViewController!.animation!.value.round();
 
-    print("tabViewIndex: $tabViewIndex, _currentIndex: $_currentIndex");
+    print('tabViewIndex: $tabViewIndex, _currentIndex: $_currentIndex');
 
     if (tabViewIndex != _currentIndex) {
       _changedTabIndex(tabViewIndex);
@@ -107,8 +103,8 @@ class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
   }
 
   void _changedTabPosition() {
-    print("_changedTabPosition");
-    final currentIndex = _tabController!.animation!.value.round();
+    print('_changedTabPosition');
+    final int currentIndex = _tabController!.animation!.value.round();
     if (_tabController!.index != _currentIndex) {
       if (_tabController!.index == currentIndex) {
         _changedTabIndex(currentIndex);
@@ -132,7 +128,7 @@ class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
     } else {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }
-    print("index: $index => ${_tabController!.offset}");
+    print('index: $index => ${_tabController!.offset}');
   }
 
   @override

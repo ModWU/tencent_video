@@ -33,12 +33,12 @@ enum ThemeStyle {
 }
 
 class ThemeAttrs {
-  ThemeAttrs._();
+  const ThemeAttrs._();
 
   static final ThemeData defaultThemeStyle = ThemeData(
     backgroundColor: ColorAttrs.lightBackgroundColor,
     scaffoldBackgroundColor: ColorAttrs.lightBackgroundColor,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: ColorAttrs.lightBackgroundColor,
       selectedItemColor: ColorAttrs.home_nav_selected_light_color,
       unselectedItemColor: ColorAttrs.home_nav_unselected_light_color,
@@ -55,7 +55,7 @@ class ThemeAttrs {
         fontWeight: FontWeight.w500,
       ),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: const TabBarTheme(
       unselectedLabelColor: ColorAttrs.home_tab_unselected_light_color,
       labelColor: ColorAttrs.home_tab_selected_light_color,
       labelPadding: EdgeInsets.symmetric(horizontal: 9.4),
@@ -68,7 +68,7 @@ class ThemeAttrs {
         fontWeight: FontWeight.w500,
       ),
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: ColorAttrs.lightBackgroundColor,
       brightness: Brightness.light,
       elevation: 0.4,
@@ -110,10 +110,10 @@ class ThemeAttrs {
           appBarTheme: defaultThemeData.appBarTheme.copyWith(
             backgroundColor: ColorAttrs.darkBackgroundColor,
             brightness: Brightness.dark,
-            titleTextStyle: TextStyle(
+            titleTextStyle: const TextStyle(
               color: Colors.white,
             ),
-            systemOverlayStyle: SystemUiOverlayStyle(
+            systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
               statusBarIconBrightness: Brightness.dark,
             ),
@@ -134,7 +134,7 @@ class ThemeAttrs {
               return Colors.black54;
             }),
           ),
-          textTheme: TextTheme(
+          textTheme: const TextTheme(
             bodyText1: TextAttrs.home_dark_body,
             headline6: TextAttrs.home_light_headline6,
           ),

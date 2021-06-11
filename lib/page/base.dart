@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'boot_manager.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
@@ -10,9 +9,9 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final bootContext = BootContext.of(context);
+    final BootContext? bootContext = BootContext.of(context);
     assert(bootContext != null);
-    final oldBootContext = _bootContext;
+    final BootContext? oldBootContext = _bootContext;
     _bootContext = bootContext;
 
     if (oldBootContext == null) {
