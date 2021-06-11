@@ -46,24 +46,30 @@ class _ChoicenessState extends BaseState<Choiceness>
                 Flexible(
                   child: RadioListTile<String>(
                     title: const Text('英文'),
-                    value: 'en',
+                    value:  LanguageCodes.en,
                     groupValue: bootContext.locale.value?.languageCode,
                     onChanged: (String? value) {
-                      setState(() {
-                        bootContext.changeLanguage(LanguageCodes.en);
-                      });
+                      bootContext.changeLanguage(value);
                     },
                   ),
                 ),
                 Flexible(
                   child: RadioListTile<String>(
                     title: const Text('中文'),
-                    value: 'zh',
+                    value: LanguageCodes.zh,
                     groupValue: bootContext.locale.value?.languageCode,
                     onChanged: (String? value) {
-                      setState(() {
-                        bootContext.changeLanguage(LanguageCodes.zh);
-                      });
+                      bootContext.changeLanguage(value);
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: RadioListTile<String>(
+                    title: const Text('跟随系统'),
+                    value: 'null',
+                    groupValue: bootContext.locale.value?.languageCode ?? 'null',
+                    onChanged: (String? value) {
+                      bootContext.changeLanguage(null);
                     },
                   ),
                 ),

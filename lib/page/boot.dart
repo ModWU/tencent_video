@@ -5,6 +5,7 @@ import 'package:tencent_video/common/listener/tap.dart';
 import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/person/person.dart';
 import 'package:tencent_video/page/vip/vip.dart';
+import 'package:tencent_video/resources/languages.dart';
 import 'package:tencent_video/resources/styles.dart';
 import 'package:tencent_video/ui/state/rive_state.dart';
 import 'base.dart';
@@ -51,6 +52,7 @@ class _BootState extends State<Boot> with BootManager {
 
   @override
   Widget build(BuildContext context) {
+    print("root build => 'locale.value': ${locale.value}");
     return startBoot(
       child: MaterialApp(
         localizationsDelegates: _delegates,
@@ -58,12 +60,18 @@ class _BootState extends State<Boot> with BootManager {
         locale: locale.value,
         localeListResolutionCallback:
             (List<Locale>? locales, Iterable<Locale> supportedLocales) {
-          if (locales != null && locales.isNotEmpty) {
-            for (final Locale locale in locales) {
-              if (S.delegate.isSupported(locale)) return locale;
+          List<Locale>? currentLocales;
+          if (locales?.isNotEmpty == true) {
+            for (final Locale locale in locales!) {
+              if (S.delegate.isSupported(locale)) {
+                currentLocales ??= <Locale>[];
+                currentLocales.add(locale);
+              }
             }
           }
-          return S.delegate.supportedLocales[0];
+          return currentLocales?.isNotEmpty == true
+              ? currentLocales![0]
+              : const Locale.fromSubtags(languageCode: LanguageCodes.en);
         },
         theme: themeData,
         home: Scaffold(

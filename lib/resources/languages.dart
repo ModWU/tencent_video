@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 class LanguageCodes {
   const LanguageCodes._();
 

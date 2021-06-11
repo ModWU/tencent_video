@@ -36,7 +36,7 @@ mixin BootManager implements BootContext {
 
   final Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
 
-  final Ob<Locale> _locale = Ob<Locale>(null);
+  final Ob<Locale> _locale = const Locale.fromSubtags(languageCode: LanguageCodes.en).ob;
 
   @override
   bool isPageAt(PageCategory page) {
