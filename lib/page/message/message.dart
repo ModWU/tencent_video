@@ -11,7 +11,7 @@ class MessagePage extends StatefulWidget {
   State<StatefulWidget> createState() => _MessagePageState();
 }
 
-class _MessagePageState extends BaseState<MessagePage> {
+class _MessagePageState extends State<MessagePage> with BootMiXin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

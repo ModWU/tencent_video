@@ -11,7 +11,7 @@ class VipPage extends StatefulWidget {
   State<StatefulWidget> createState() => _VipPageState();
 }
 
-class _VipPageState extends BaseState<VipPage> {
+class _VipPageState extends State<VipPage> with BootMiXin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

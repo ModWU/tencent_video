@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:tencent_video/common/listener/ob.dart';
-import 'package:tencent_video/resources/languages.dart';
+import 'package:tencent_video/resources/strings.dart';
 import '../../base.dart';
 
 class Choiceness extends StatefulWidget {
@@ -10,8 +10,8 @@ class Choiceness extends StatefulWidget {
   State<StatefulWidget> createState() => _ChoicenessState();
 }
 
-class _ChoicenessState extends BaseState<Choiceness>
-    with AutomaticKeepAliveClientMixin {
+class _ChoicenessState extends State<Choiceness>
+    with BootMiXin, AutomaticKeepAliveClientMixin {
   RefreshController? _refreshController;
 
   /*void _onRefresh() async {
@@ -46,7 +46,7 @@ class _ChoicenessState extends BaseState<Choiceness>
                 Flexible(
                   child: RadioListTile<String>(
                     title: const Text('英文'),
-                    value:  LanguageCodes.en,
+                    value: LanguageCodes.en,
                     groupValue: bootContext.locale.value?.languageCode,
                     onChanged: (String? value) {
                       bootContext.changeLanguage(value);
@@ -67,7 +67,8 @@ class _ChoicenessState extends BaseState<Choiceness>
                   child: RadioListTile<String>(
                     title: const Text('跟随系统'),
                     value: 'null',
-                    groupValue: bootContext.locale.value?.languageCode ?? 'null',
+                    groupValue:
+                        bootContext.locale.value?.languageCode ?? 'null',
                     onChanged: (String? value) {
                       bootContext.changeLanguage(null);
                     },

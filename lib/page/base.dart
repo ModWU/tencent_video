@@ -1,27 +1,10 @@
 import 'package:flutter/material.dart';
 import 'boot_manager.dart';
 
-abstract class BaseState<T extends StatefulWidget> extends State<T> {
-  BootContext? _bootContext;
+@optionalTypeArgs
+mixin BootMiXin<T extends StatefulWidget> on State<T> {
 
-  BootContext get bootContext => _bootContext!;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final BootContext? bootContext = BootContext.of(context);
-    assert(bootContext != null);
-    final BootContext? oldBootContext = _bootContext;
-    _bootContext = bootContext;
-
-    if (oldBootContext == null) {
-      _updateBootContext(oldBootContext);
-    } else if (oldBootContext != bootContext) {
-      setState(() {
-        _updateBootContext(oldBootContext);
-      });
-    }
-  }
+  BootContext get bootContext => BootContext.get();
 
   @protected
   void changedPage() {}
@@ -29,32 +12,22 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
   @protected
   void changedThemeStyle() {}
 
-  @protected
-  void updateBootContext(BootContext? oldBootContext) {}
-
   bool isPageAt(PageCategory page) {
     return bootContext.isPageAt(page);
   }
 
-  void _removeListeners(BootContext? bootContext) {
-    bootContext?.page.removeListener(changedPage);
-    bootContext?.themeStyle.removeListener(changedThemeStyle);
-  }
-
-  void _updateBootContext(BootContext? oldBootContext) {
-    _removeListeners(oldBootContext);
+  @override
+  void initState() {
+    super.initState();
 
     bootContext.page.addListener(changedPage);
     bootContext.themeStyle.addListener(changedThemeStyle);
-
-    updateBootContext(oldBootContext);
   }
 
   @override
   void dispose() {
-    assert(_bootContext != null);
-    _removeListeners(_bootContext);
-    _bootContext = null;
+    bootContext.page.removeListener(changedPage);
+    bootContext.themeStyle.removeListener(changedThemeStyle);
     super.dispose();
   }
 }

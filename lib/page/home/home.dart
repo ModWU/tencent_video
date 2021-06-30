@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with BootMiXin, TickerProviderStateMixin {
   TabController? _tabController;
 
   TabController? _tabViewController;
@@ -35,7 +35,7 @@ class _HomePageState extends BaseState<HomePage> with TickerProviderStateMixin {
     _tabController!.animation!.addListener(_changedTabPosition);
     _tabViewController!.animation!.addListener(_changeTabViewPosition);
 
-    themeStyle = ThemeStyle.normal;
+    themeStyle = bootContext.themeStyle.value;
   }
 
   @override

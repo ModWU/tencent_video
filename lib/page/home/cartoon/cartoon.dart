@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_workers/rx_workers.dart';
+import 'package:tencent_video/common/listener/data_notifier.dart';
 import 'package:tencent_video/common/listener/ob.dart';
 
 class Cartoon extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CartoonState();
 }
+
+enum Type {
+  search, refresh, changeName
+}
+
+/*class PageAController with DataNotifier {
+  
+  String? _searchKey;
+  String get searchKey => _searchKey!;
+
+  set searchKey(String value) {
+   if (value == _searchKey) return;
+   _searchKey = value;
+    notifyListeners('search');
+  }
+
+  void addSearchListener(Type type, VoidCallback listener) {
+    addListener(type, listener);
+  }
+
+  void removeSearchListener(Type type, VoidCallback listener) {
+    removeListenerByKey(type, listener);
+  }
+
+}*/
 
 class _CartoonState extends State<Cartoon> with RestorationMixin {
   final RestorableDouble _counter = RestorableDouble(0);
@@ -39,7 +64,6 @@ class _CartoonState extends State<Cartoon> with RestorationMixin {
                 return Slider(
                   value: data.value!,
                   onChanged: (double val) {
-                    print('change:$val');
                     data.value = double.tryParse(val.toStringAsPrecision(2));
                   },
                   onChangeStart: (data) {

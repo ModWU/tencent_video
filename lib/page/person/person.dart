@@ -9,7 +9,7 @@ class PersonPage extends StatefulWidget {
   State<StatefulWidget> createState() => _PersonPageState();
 }
 
-class _PersonPageState extends BaseState<PersonPage> {
+class _PersonPageState extends State<PersonPage> with BootMiXin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

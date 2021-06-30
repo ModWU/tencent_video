@@ -9,7 +9,7 @@ class DokiPage extends StatefulWidget {
   State<StatefulWidget> createState() => _DokiPageState();
 }
 
-class _DokiPageState extends BaseState<DokiPage> {
+class _DokiPageState extends State<DokiPage> with BootMiXin {
   @override
   Widget build(BuildContext context) {
     print("doki build");

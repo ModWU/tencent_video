@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/ob.dart';
-import 'package:tencent_video/resources/languages.dart';
-import 'package:tencent_video/generated/l10n.dart';
+import 'package:tencent_video/common/utils/simple_utils.dart';
+import 'package:tencent_video/resources/strings.dart';
 import 'package:tencent_video/resources/styles.dart';
+import 'boot.dart';
 
 enum PageCategory {
   home,
@@ -24,19 +25,17 @@ abstract class BootContext {
   TextStyle get bodyText;
   ThemeData get themeData;
 
-  static BootContext? of(BuildContext context) {
-    final _BootContextScope? bootContextScope =
-        context.dependOnInheritedWidgetOfExactType<_BootContextScope>();
-    return bootContextScope?.bootContext;
+  static BootContext get() {
+    return BootManager._instance!;
   }
 }
 
-mixin BootManager implements BootContext {
+mixin BootManager on State<Boot> implements BootContext {
   final Ob<PageCategory> _page = PageCategory.home.ob;
 
   final Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
 
-  final Ob<Locale> _locale = const Locale.fromSubtags(languageCode: LanguageCodes.en).ob;
+  final Ob<Locale> _locale = SimpleUtils.getLocalByCode(LanguageCodes.en).ob;
 
   @override
   bool isPageAt(PageCategory page) {
@@ -52,14 +51,18 @@ mixin BootManager implements BootContext {
   @override
   Ob<Locale> get locale => _locale;
 
-  Widget startBoot({required Widget child}) {
-    return _BootContextScope(
-      bootContext: this,
-      child: RootRestorationScope(
-        restorationId: 'root',
-        child: child,
-      ),
-    );
+  static BootManager? _instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _instance = this;
+  }
+
+  @override
+  void dispose() {
+    _instance = null;
+    super.dispose();
   }
 
   @override
@@ -70,22 +73,7 @@ mixin BootManager implements BootContext {
   @override
   void changeLanguage(String? value) {
     final Locale? locale =
-        value != null ? Locale.fromSubtags(languageCode: value) : null;
+        value != null ? SimpleUtils.getLocalByCode(value) : null;
     _locale.value = locale;
-  }
-}
-
-class _BootContextScope extends InheritedWidget {
-  const _BootContextScope({
-    Key? key,
-    required this.bootContext,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  final BootContext bootContext;
-
-  @override
-  bool updateShouldNotify(_BootContextScope old) {
-    return bootContext != old.bootContext;
   }
 }
