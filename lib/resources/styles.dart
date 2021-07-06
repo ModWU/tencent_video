@@ -61,11 +61,11 @@ class ThemeAttrs {
       labelPadding: EdgeInsets.symmetric(horizontal: 9.4),
       labelStyle: TextStyle(
         fontSize: 24,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.bold,
       ),
       unselectedLabelStyle: TextStyle(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.bold,
       ),
     ),
     appBarTheme: const AppBarTheme(
@@ -143,6 +143,38 @@ class ThemeAttrs {
       case ThemeStyle.normal:
       default:
         return defaultThemeData;
+    }
+  }
+}
+
+enum SystemUIOverlayStyle {
+  dark,
+  light,
+}
+
+class SystemUIOverlayAttrs {
+  const SystemUIOverlayAttrs._();
+
+  static SystemUiOverlayStyle get(SystemUIOverlayStyle style) {
+    switch (style) {
+      case SystemUIOverlayStyle.light:
+        return const SystemUiOverlayStyle(
+          systemNavigationBarColor: ColorAttrs.systemNavigationBarColor,
+          systemNavigationBarDividerColor: null,
+          statusBarColor: null,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        );
+      case SystemUIOverlayStyle.dark:
+        return const SystemUiOverlayStyle(
+          systemNavigationBarColor: ColorAttrs.systemNavigationBarColor,
+          systemNavigationBarDividerColor: null,
+          statusBarColor: null,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        );
     }
   }
 }

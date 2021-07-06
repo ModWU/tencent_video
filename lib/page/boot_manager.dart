@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/ob.dart';
-import 'package:tencent_video/common/utils/simple_utils.dart';
+import 'package:tencent_video/common/utils/app_utils.dart';
 import 'package:tencent_video/resources/strings.dart';
 import 'package:tencent_video/resources/styles.dart';
 import 'boot.dart';
@@ -35,7 +35,7 @@ mixin BootManager on State<Boot> implements BootContext {
 
   final Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
 
-  final Ob<Locale> _locale = SimpleUtils.getLocalByCode(LanguageCodes.en).ob;
+  final Ob<Locale> _locale = AppUtils.getLocalByCode(LanguageCodes.en).ob;
 
   @override
   bool isPageAt(PageCategory page) {
@@ -73,7 +73,7 @@ mixin BootManager on State<Boot> implements BootContext {
   @override
   void changeLanguage(String? value) {
     final Locale? locale =
-        value != null ? SimpleUtils.getLocalByCode(value) : null;
+        value != null ? AppUtils.getLocalByCode(value) : null;
     _locale.value = locale;
   }
 }

@@ -1,15 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="LaunchTheme" parent="@style/BaseTheme">
         <item name="android:windowBackground">@drawable/launch_background</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:animation">@anim/launch_anim</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
-
-    <style name="BaseTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
-
-    </style>
-
 </resources>

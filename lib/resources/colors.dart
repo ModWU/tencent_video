@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 class ColorAttrs {
   const ColorAttrs._();
 
+  //app theme color
   static const Color lightBackgroundColor = Color(0xFFFEFEFE);
   static const Color darkBackgroundColor = Color(0xFF000000);
+
+  static const Color systemNavigationBarColor = Colors.white;
 
   //home
   static const Color home_tab_selected_light_color = Color(0xFFFE4C01);

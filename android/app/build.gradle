@@ -7,6 +7,7 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
+def flutterJar = "$flutterRoot/bin/cache/artifacts/engine/android-arm/flutter.jar"
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
@@ -56,4 +57,9 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    def flutterFile = file("$flutterJar")
+    if (flutterFile.exists()) {
+        compileOnly files("$flutterJar")
+        compileOnly 'androidx.annotation:annotation:1.1.0'
+    }
 }
