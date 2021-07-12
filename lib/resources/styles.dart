@@ -147,34 +147,24 @@ class ThemeAttrs {
   }
 }
 
-enum SystemUIOverlayStyle {
-  dark,
-  light,
-}
+class SystemUiOverlayAttrs {
+  const SystemUiOverlayAttrs._();
 
-class SystemUIOverlayAttrs {
-  const SystemUIOverlayAttrs._();
+  static const SystemUiOverlayStyle light = SystemUiOverlayStyle(
+    systemNavigationBarColor: ColorAttrs.systemNavigationBarColor,
+    systemNavigationBarDividerColor: null,
+    statusBarColor: null,
+    systemNavigationBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  );
 
-  static SystemUiOverlayStyle get(SystemUIOverlayStyle style) {
-    switch (style) {
-      case SystemUIOverlayStyle.light:
-        return const SystemUiOverlayStyle(
-          systemNavigationBarColor: ColorAttrs.systemNavigationBarColor,
-          systemNavigationBarDividerColor: null,
-          statusBarColor: null,
-          systemNavigationBarIconBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-        );
-      case SystemUIOverlayStyle.dark:
-        return const SystemUiOverlayStyle(
-          systemNavigationBarColor: ColorAttrs.systemNavigationBarColor,
-          systemNavigationBarDividerColor: null,
-          statusBarColor: null,
-          systemNavigationBarIconBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-        );
-    }
-  }
+  static const SystemUiOverlayStyle dark = SystemUiOverlayStyle(
+    systemNavigationBarColor: ColorAttrs.systemNavigationBarColor,
+    systemNavigationBarDividerColor: null,
+    statusBarColor: null,
+    systemNavigationBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  );
 }

@@ -10,7 +10,7 @@ class AppUtils {
 
   static void setAppSystemUIOverlayStyle() {
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUIOverlayAttrs.get(SystemUIOverlayStyle.light),
+      SystemUiOverlayAttrs.light,
     );
   }
 }
