@@ -59,8 +59,8 @@ class _CartoonState extends State<Cartoon> with RestorationMixin {
                 color: Colors.white,
               ),
             ),
-            child: ObWidget(
-              builder: (Ob<double> data) {
+            child: ObWidget<double>(
+              builder: (Observer<double> data) {
                 return Slider(
                   value: data.value!,
                   onChanged: (double val) {

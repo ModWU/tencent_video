@@ -1,79 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/ob.dart';
 import 'package:tencent_video/common/utils/app_utils.dart';
-import 'package:tencent_video/resources/strings.dart';
 import 'package:tencent_video/resources/styles.dart';
+import 'base.dart';
 import 'boot.dart';
 
-enum PageCategory {
-  home,
-  doki,
-  vip,
-  message,
-  person,
-}
-
 abstract class BootContext {
-  Ob<PageCategory> get page;
-  Ob<ThemeStyle> get themeStyle;
-  Ob<Locale> get locale;
+  factory BootContext.get() => _BootContextRefManager.bootContextInstance!;
+
+  Observer<PageCategory> get page;
+  Observer<ThemeStyle> get themeStyle;
+  Observer<Locale> get locale;
 
   void changeThemeStyle(ThemeStyle value);
   void changeLanguage(String? languageCode);
 
+  Listenable bindListeners(Object key, List<IAppState> states);
+  Listenable unbindListeners(Object key);
+
   bool isPageAt(PageCategory page);
   TextStyle get bodyText;
   ThemeData get themeData;
-
-  static BootContext get() {
-    return BootManager._instance!;
-  }
 }
 
 mixin BootManager on State<Boot> implements BootContext {
-  final Ob<PageCategory> _page = PageCategory.home.ob;
-
-  final Ob<ThemeStyle> _themeStyle = ThemeStyle.normal.ob;
-
-  final Ob<Locale> _locale = AppUtils.getLocalByCode(LanguageCodes.en).ob;
+  @override
+  Observer<PageCategory> get page => AppState.page.observer;
 
   @override
-  bool isPageAt(PageCategory page) {
-    return page == _page.value;
+  Observer<ThemeStyle> get themeStyle => AppState.theme.observer;
+
+  @override
+  Observer<Locale> get locale => AppState.language.observer;
+
+  @override
+  Listenable bindListeners(Object key, List<IAppState> states) =>
+      AppState.bindListeners(key, states);
+
+  @override
+  Listenable unbindListeners(Object key) => AppState.unbindListeners(key);
+
+  @override
+  bool isPageAt(PageCategory pageValue) {
+    return pageValue == page.value;
   }
-
-  @override
-  Ob<PageCategory> get page => _page;
-
-  @override
-  Ob<ThemeStyle> get themeStyle => _themeStyle;
-
-  @override
-  Ob<Locale> get locale => _locale;
-
-  static BootManager? _instance;
 
   @override
   void initState() {
     super.initState();
-    _instance = this;
+    _BootContextRefManager.addInstance(this);
   }
 
   @override
   void dispose() {
-    _instance = null;
+    if (_BootContextRefManager.removeInstance(this)) {
+      _BootContextRefManager.dispose();
+    }
     super.dispose();
   }
 
   @override
   void changeThemeStyle(ThemeStyle value) {
-    _themeStyle.value = value;
+    themeStyle.value = value;
   }
 
   @override
   void changeLanguage(String? value) {
-    final Locale? locale =
+    final Locale? localeValue =
         value != null ? AppUtils.getLocalByCode(value) : null;
-    _locale.value = locale;
+    locale.value = localeValue;
+  }
+}
+
+class _BootContextRefManager {
+  _BootContextRefManager._();
+
+  static BootContext? _bootContextInstance;
+  static Map<int, BootContext>? bootContextRefCache;
+
+  static BootContext? get bootContextInstance =>
+      bootContextRefCache?[_bootContextInstance?.hashCode];
+
+  static void addInstance(BootContext instance) {
+    bootContextRefCache ??= <int, BootContext>{};
+    bootContextRefCache![instance.hashCode] = instance;
+    _bootContextInstance = instance;
+  }
+
+  static bool removeInstance(BootContext instance) {
+    bootContextRefCache?.remove(instance.hashCode);
+    return bootContextRefCache?.isEmpty ?? true;
+  }
+
+  static void dispose() {
+    _bootContextInstance = null;
+    bootContextRefCache = null;
   }
 }

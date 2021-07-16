@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-typedef WidgetCallback<T> = Widget Function(Ob<T>);
+typedef WidgetCallback<T> = Widget Function(Observer<T>);
 
 extension ObExtension<T> on T {
-  Ob<T> get ob => Ob<T>(this);
+  Observer<T> get ob => Observer<T>(this);
 }
 
-class Ob<T> with ChangeNotifier {
+class Observer<T> with ChangeNotifier {
 
-  Ob(this._value);
+  Observer(this._value);
 
   T? _value;
 
@@ -33,7 +33,7 @@ class Ob<T> with ChangeNotifier {
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(dynamic other) {
     if (other is T) return value == other;
-    if (other is Ob<T>) return value == other.value;
+    if (other is Observer<T>) return value == other.value;
     return false;
   }
 
@@ -45,11 +45,11 @@ class Ob<T> with ChangeNotifier {
 class ObWidget<T> extends StatefulWidget {
   const ObWidget({required this.builder, required this.initialValue});
 
-  final Ob<T> initialValue;
+  final Observer<T> initialValue;
   final WidgetCallback<T> builder;
 
   Widget _buildWidget(dynamic data) {
-    return builder(data as Ob<T>);
+    return builder(data as Observer<T>);
   }
 
   @override
@@ -58,7 +58,7 @@ class ObWidget<T> extends StatefulWidget {
 
 class _ObsWidgetState<T> extends State<ObWidget<T>> {
 
-  Ob<T>? _data;
+  Observer<T>? _data;
 
   @override
   void initState() {

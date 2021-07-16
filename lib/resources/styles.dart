@@ -54,6 +54,12 @@ class ThemeAttrs {
         fontSize: 10,
         fontWeight: FontWeight.w500,
       ),
+      selectedIconTheme: IconThemeData(
+        size: 20,
+      ),
+      unselectedIconTheme: IconThemeData(
+        size: 20,
+      ),
     ),
     tabBarTheme: const TabBarTheme(
       unselectedLabelColor: ColorAttrs.home_tab_unselected_light_color,

@@ -26,23 +26,20 @@ class _BootState extends State<Boot> with BootManager {
   void initState() {
     super.initState();
     _themeData = ThemeAttrs.get(themeStyle.value!);
-    page.addListener(_rebuild);
-    locale.addListener(_rebuild);
+    bindListeners(this, <IAppState>[AppState.page, AppState.language])
+        .addListener(_rebuild);
     themeStyle.addListener(_changedThemeStyle);
   }
 
   @override
   void dispose() {
-    page.removeListener(_rebuild);
-    locale.removeListener(_rebuild);
+    unbindListeners(this);
     themeStyle.removeListener(_changedThemeStyle);
     _themeData = null;
     super.dispose();
   }
 
-  void _rebuild() {
-    setState(() {});
-  }
+  void _rebuild() => setState(() {});
 
   void _changedThemeStyle() {
     setState(() {
@@ -50,7 +47,7 @@ class _BootState extends State<Boot> with BootManager {
     });
   }
 
-  Locale? _handleLocales(
+  static Locale? _handleLocales(
       List<Locale>? locales, Iterable<Locale> supportedLocales) {
     List<Locale>? currentLocales;
     if (locales?.isNotEmpty == true) {
@@ -77,7 +74,6 @@ class _BootState extends State<Boot> with BootManager {
         localeListResolutionCallback: _handleLocales,
         theme: themeData,
         home: Scaffold(
-          bottomNavigationBar: const _BottomNavigationBarWidget(),
           body: IndexedStack(
             index: page.value!.index,
             children: <Widget>[
@@ -88,6 +84,7 @@ class _BootState extends State<Boot> with BootManager {
               PersonPage(),
             ],
           ),
+          bottomNavigationBar: const _BottomNavigationBarWidget(),
         ),
       ),
     );
@@ -119,7 +116,9 @@ class _BottomNavigationBarWidgetState extends State<_BottomNavigationBarWidget>
 
   @override
   void changedPage() {
-    _pageTapListener!.onTap(bootContext.page.value!);
+    setState(() {
+      _pageTapListener!.onTap(bootContext.page.value!);
+    });
   }
 
   @override
@@ -160,7 +159,6 @@ class _BottomNavigationBarWidgetState extends State<_BottomNavigationBarWidget>
               label: S.of(context).person_tle),
         ],
         currentIndex: bootContext.page.value!.index,
-        iconSize: 20,
         onTap: (int index) {
           bootContext.page.value = PageCategory.values[index];
         },
