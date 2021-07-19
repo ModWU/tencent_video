@@ -15,11 +15,15 @@ class Observer<T> with ChangeNotifier {
   T? get value => _value;
 
   set value(T? value) {
+    resetValue(value);
+    notifyListeners();
+  }
+
+  void resetValue(T? value) {
     if (_value == value) {
       return;
     }
     _value = value;
-    notifyListeners();
   }
 
   T? call([T? v]) {

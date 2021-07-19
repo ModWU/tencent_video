@@ -26,7 +26,7 @@ class _MessagePageState extends State<MessagePage> with BootMiXin {
   }
 
   @override
-  void changedPage() {
+  void pageChanged() {
     if (isPageAt(PageCategory.message)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }

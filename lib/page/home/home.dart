@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> with BootMiXin, TickerProviderState
     _tabController!.animation!.addListener(_changedTabPosition);
     _tabViewController!.animation!.addListener(_changeTabViewPosition);
 
-    themeStyle = bootContext.themeStyle.value;
+    themeStyle = bootContext.theme.value;
   }
 
   @override
@@ -51,14 +51,14 @@ class _HomePageState extends State<HomePage> with BootMiXin, TickerProviderState
   }
 
   @override
-  void changedThemeStyle() {
+  void themeChanged() {
     if (isPageAt(PageCategory.home)) {
-      themeStyle = bootContext.themeStyle.value;
+      themeStyle = bootContext.theme.value;
     }
   }
 
   @override
-  void changedPage() {
+  void pageChanged() {
     if (isPageAt(PageCategory.home)) {
       bootContext.changeThemeStyle(themeStyle!);
      /* final StatefulElement? element =
@@ -133,6 +133,7 @@ class _HomePageState extends State<HomePage> with BootMiXin, TickerProviderState
 
   @override
   Widget build(BuildContext context) {
+    print("home build");
     final ThemeData localTheme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(

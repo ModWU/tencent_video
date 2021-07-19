@@ -21,33 +21,43 @@ class Boot extends StatefulWidget {
 
 class _BootState extends State<Boot> with BootManager {
   ThemeData? _themeData;
+  Locale? _locale;
 
   @override
   void initState() {
     super.initState();
-    _themeData = ThemeAttrs.get(themeStyle.value!);
-    bindListeners(this, <IAppState>[AppState.page, AppState.language])
-        .addListener(_rebuild);
-    themeStyle.addListener(_changedThemeStyle);
+    _themeData = ThemeAttrs.get(theme.value!);
+    _locale = LanguageCodes.getLocaleByLanguage(language.value!);
+    page.addListener(_pageChanged);
+    theme.addListener(_themeChanged);
+    language.addListener(_languageChanged);
   }
 
   @override
   void dispose() {
-    unbindListeners(this);
-    themeStyle.removeListener(_changedThemeStyle);
+    page.removeListener(_pageChanged);
+    theme.removeListener(_themeChanged);
+    language.removeListener(_languageChanged);
     _themeData = null;
+    _locale = null;
     super.dispose();
   }
 
-  void _rebuild() => setState(() {});
+  void _pageChanged() => setState(() {});
 
-  void _changedThemeStyle() {
+  void _themeChanged() {
     setState(() {
-      _themeData = ThemeAttrs.get(themeStyle.value!);
+      _themeData = ThemeAttrs.get(theme.value!);
     });
   }
 
-  static Locale? _handleLocales(
+  void _languageChanged() {
+    setState(() {
+      _locale = LanguageCodes.getLocaleByLanguage(language.value);
+    });
+  }
+
+  Locale? _handleLocales(
       List<Locale>? locales, Iterable<Locale> supportedLocales) {
     List<Locale>? currentLocales;
     if (locales?.isNotEmpty == true) {
@@ -58,19 +68,23 @@ class _BootState extends State<Boot> with BootManager {
         }
       }
     }
-    return currentLocales?.isNotEmpty == true
+
+    final Locale locale = currentLocales?.isNotEmpty == true
         ? currentLocales!.first
-        : const Locale.fromSubtags(languageCode: LanguageCodes.en);
+        : LanguageCodes.defaultLocale;
+
+    return locale;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('boot build');
     return RootRestorationScope(
       restorationId: 'root',
       child: MaterialApp(
         localizationsDelegates: _delegates,
         supportedLocales: S.delegate.supportedLocales,
-        locale: locale.value,
+        locale: _locale,
         localeListResolutionCallback: _handleLocales,
         theme: themeData,
         home: Scaffold(
@@ -95,6 +109,9 @@ class _BootState extends State<Boot> with BootManager {
 
   @override
   ThemeData get themeData => _themeData!;
+
+  @override
+  Locale? get locale => _locale;
 }
 
 class _BottomNavigationBarWidget extends StatefulWidget {
@@ -115,7 +132,7 @@ class _BottomNavigationBarWidgetState extends State<_BottomNavigationBarWidget>
   }
 
   @override
-  void changedPage() {
+  void pageChanged() {
     setState(() {
       _pageTapListener!.onTap(bootContext.page.value!);
     });

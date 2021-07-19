@@ -26,7 +26,7 @@ class _VipPageState extends State<VipPage> with BootMiXin {
   }
 
   @override
-  void changedPage() {
+  void pageChanged() {
     if (isPageAt(PageCategory.vip)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }

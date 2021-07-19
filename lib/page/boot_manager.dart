@@ -8,34 +8,35 @@ import 'boot.dart';
 abstract class BootContext {
   factory BootContext.get() => _BootContextRefManager.bootContextInstance!;
 
-  Observer<PageCategory> get page;
-  Observer<ThemeStyle> get themeStyle;
-  Observer<Locale> get locale;
+  AppState<PageCategory> get page;
+  AppState<ThemeStyle> get theme;
+  AppState<String> get language;
 
   void changeThemeStyle(ThemeStyle value);
   void changeLanguage(String? languageCode);
 
-  Listenable bindListeners(Object key, List<IAppState> states);
+  Listenable bindListeners(Object key, List<Listenable> listeners);
   Listenable unbindListeners(Object key);
 
   bool isPageAt(PageCategory page);
   TextStyle get bodyText;
   ThemeData get themeData;
+  Locale? get locale;
 }
 
 mixin BootManager on State<Boot> implements BootContext {
   @override
-  Observer<PageCategory> get page => AppState.page.observer;
+  AppState<PageCategory> get page => AppState.page;
 
   @override
-  Observer<ThemeStyle> get themeStyle => AppState.theme.observer;
+  AppState<ThemeStyle> get theme => AppState.theme;
 
   @override
-  Observer<Locale> get locale => AppState.language.observer;
+  AppState<String> get language => AppState.language;
 
   @override
-  Listenable bindListeners(Object key, List<IAppState> states) =>
-      AppState.bindListeners(key, states);
+  Listenable bindListeners(Object key, List<Listenable> listeners) =>
+      AppState.bindListeners(key, listeners);
 
   @override
   Listenable unbindListeners(Object key) => AppState.unbindListeners(key);
@@ -61,15 +62,14 @@ mixin BootManager on State<Boot> implements BootContext {
 
   @override
   void changeThemeStyle(ThemeStyle value) {
-    themeStyle.value = value;
+    theme.value = value;
   }
 
   @override
   void changeLanguage(String? value) {
-    final Locale? localeValue =
-        value != null ? AppUtils.getLocalByCode(value) : null;
-    locale.value = localeValue;
+    language.value = value;
   }
+
 }
 
 class _BootContextRefManager {

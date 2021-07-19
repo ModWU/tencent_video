@@ -24,7 +24,7 @@ class _PersonPageState extends State<PersonPage> with BootMiXin {
   }
 
   @override
-  void changedPage() {
+  void pageChanged() {
     if (isPageAt(PageCategory.person)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }

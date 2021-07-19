@@ -13,50 +13,43 @@ enum PageCategory {
   person,
 }
 
-abstract class IAppState {}
+class AppState<T> extends Observer<T> {
+  AppState._(T value) : super(value);
 
-class AppState<T> implements IAppState {
-  AppState._(this.observer);
+  static List<Listenable>? _allListeners;
 
-  final Observer<T> observer;
+  static Map<Object, Listenable>? _allBindListeners;
 
-  static Map<IAppState, Listenable>? _allListenable;
+  static AppState<T> _from<T>(T value) {
+    _allListeners ??= <Listenable>[];
 
-  static Map<Object, Listenable>? _allBindListenable;
+    final AppState<T> state = AppState<T>._(value);
 
-  static AppState<P> _from<P>(P p) {
-    _allListenable ??= <IAppState, Listenable>{};
-
-    final Observer<P> observer = p.ob;
-
-    final AppState<P> state = AppState<P>._(observer);
-
-    _allListenable![state] = observer;
+    _allListeners!.add(state);
 
     return state;
   }
 
-  static Listenable bindListeners(Object key, List<IAppState> states) {
-    assert(_allListenable?.isNotEmpty == true);
-    assert(states.isNotEmpty);
-    final List<Listenable> allListenable = states
-        .where((IAppState state) => _allListenable!.containsKey(state))
-        .map((IAppState state) => _allListenable![state]!)
-        .toList();
-    assert(allListenable.isNotEmpty);
-    _allBindListenable ??= <Object, Listenable>{};
-    return _allBindListenable![key] = Listenable.merge(allListenable);
+  static Listenable bindListeners(Object key, List<Listenable> listeners) {
+    assert(_allListeners!.isNotEmpty);
+    assert(listeners.isNotEmpty);
+    assert(_allBindListeners == null || !_allBindListeners!.containsKey(key));
+    for (final Listenable listener in listeners)
+      assert(_allListeners!.contains(listener));
+
+    _allBindListeners ??= <Object, Listenable>{};
+    return _allBindListeners![key] = Listenable.merge(listeners);
   }
 
   static Listenable unbindListeners(Object key) {
-    assert(_allBindListenable?.isNotEmpty == true);
-    assert(_allListenable?.isNotEmpty == true);
+    assert(_allListeners!.isNotEmpty);
+    assert(_allBindListeners?.isNotEmpty == true);
 
-    final Listenable? listenable = _allBindListenable!.remove(key);
+    final Listenable? listenable = _allBindListeners!.remove(key);
     assert(listenable != null);
 
-    if (_allBindListenable!.isEmpty) {
-      _allBindListenable = null;
+    if (_allBindListeners!.isEmpty) {
+      _allBindListeners = null;
     }
 
     return listenable!;
@@ -66,8 +59,7 @@ class AppState<T> implements IAppState {
 
   static final AppState<ThemeStyle> theme = AppState._from(ThemeStyle.normal);
 
-  static final AppState<Locale> language =
-      AppState._from(AppUtils.getLocalByCode(LanguageCodes.en));
+  static final AppState<String> language = AppState._from(LanguageCodes.en);
 }
 
 @optionalTypeArgs
@@ -75,10 +67,10 @@ mixin BootMiXin<T extends StatefulWidget> on State<T> {
   BootContext get bootContext => BootContext.get();
 
   @protected
-  void changedPage() {}
+  void pageChanged() {}
 
   @protected
-  void changedThemeStyle() {}
+  void themeChanged() {}
 
   bool isPageAt(PageCategory page) {
     return bootContext.isPageAt(page);
@@ -87,14 +79,14 @@ mixin BootMiXin<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    bootContext.page.addListener(changedPage);
-    bootContext.themeStyle.addListener(changedThemeStyle);
+    bootContext.page.addListener(pageChanged);
+    bootContext.theme.addListener(themeChanged);
   }
 
   @override
   void dispose() {
-    bootContext.page.removeListener(changedPage);
-    bootContext.themeStyle.removeListener(changedThemeStyle);
+    bootContext.page.removeListener(pageChanged);
+    bootContext.theme.removeListener(themeChanged);
     super.dispose();
   }
 }

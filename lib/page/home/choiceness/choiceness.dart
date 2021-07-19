@@ -47,8 +47,9 @@ class _ChoicenessState extends State<Choiceness>
                   child: RadioListTile<String>(
                     title: const Text('英文'),
                     value: LanguageCodes.en,
-                    groupValue: bootContext.locale.value?.languageCode,
+                    groupValue: bootContext.language.value,
                     onChanged: (String? value) {
+
                       bootContext.changeLanguage(value);
                     },
                   ),
@@ -57,8 +58,9 @@ class _ChoicenessState extends State<Choiceness>
                   child: RadioListTile<String>(
                     title: const Text('中文'),
                     value: LanguageCodes.zh,
-                    groupValue: bootContext.locale.value?.languageCode,
+                    groupValue: bootContext.language.value,
                     onChanged: (String? value) {
+                      print("value: $value, bootContext.value: ${bootContext.language.value}");
                       bootContext.changeLanguage(value);
                     },
                   ),
@@ -67,8 +69,7 @@ class _ChoicenessState extends State<Choiceness>
                   child: RadioListTile<String>(
                     title: const Text('跟随系统'),
                     value: 'null',
-                    groupValue:
-                        bootContext.locale.value?.languageCode ?? 'null',
+                    groupValue: bootContext.language.value ?? 'null',
                     onChanged: (String? value) {
                       bootContext.changeLanguage(null);
                     },

@@ -26,7 +26,7 @@ class _DokiPageState extends State<DokiPage> with BootMiXin {
   }
 
   @override
-  void changedPage() {
+  void pageChanged() {
     if (isPageAt(PageCategory.doki)) {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }
