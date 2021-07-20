@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_video/resources/styles.dart';
+import '../app_state.dart';
 import '../base.dart';
-import '../boot_manager.dart';
 
 class MessagePage extends StatefulWidget {
 

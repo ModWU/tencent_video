@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:tencent_video/common/listener/ob.dart';
 import 'package:tencent_video/common/utils/app_utils.dart';
 import 'package:tencent_video/resources/styles.dart';
+import 'app_state.dart';
 import 'base.dart';
 import 'boot.dart';
 
@@ -13,7 +15,7 @@ abstract class BootContext {
   AppState<String> get language;
 
   void changeThemeStyle(ThemeStyle value);
-  void changeLanguage(String? languageCode);
+  void changeLanguage(String languageCode);
 
   Listenable bindListeners(Object key, List<Listenable> listeners);
   Listenable unbindListeners(Object key);
@@ -50,11 +52,13 @@ mixin BootManager on State<Boot> implements BootContext {
   void initState() {
     super.initState();
     _BootContextRefManager.addInstance(this);
+    assert(AppState.initialized);
   }
 
   @override
   void dispose() {
     if (_BootContextRefManager.removeInstance(this)) {
+      AppState.doDispose();
       _BootContextRefManager.dispose();
     }
     super.dispose();
@@ -66,7 +70,7 @@ mixin BootManager on State<Boot> implements BootContext {
   }
 
   @override
-  void changeLanguage(String? value) {
+  void changeLanguage(String value) {
     language.value = value;
   }
 

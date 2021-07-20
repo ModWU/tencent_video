@@ -8,6 +8,7 @@ import 'package:tencent_video/page/vip/vip.dart';
 import 'package:tencent_video/resources/strings.dart';
 import 'package:tencent_video/resources/styles.dart';
 import 'package:tencent_video/ui/state/rive_state.dart';
+import 'app_state.dart';
 import 'base.dart';
 import 'boot_manager.dart';
 import 'doki/doki.dart';
@@ -26,8 +27,8 @@ class _BootState extends State<Boot> with BootManager {
   @override
   void initState() {
     super.initState();
-    _themeData = ThemeAttrs.get(theme.value!);
-    _locale = LanguageCodes.getLocaleByLanguage(language.value!);
+    _themeData = ThemeAttrs.get(theme.value);
+    _locale = LanguageCodes.getLocaleByLanguage(language.value);
     page.addListener(_pageChanged);
     theme.addListener(_themeChanged);
     language.addListener(_languageChanged);
@@ -47,7 +48,7 @@ class _BootState extends State<Boot> with BootManager {
 
   void _themeChanged() {
     setState(() {
-      _themeData = ThemeAttrs.get(theme.value!);
+      _themeData = ThemeAttrs.get(theme.value);
     });
   }
 
@@ -89,7 +90,7 @@ class _BootState extends State<Boot> with BootManager {
         theme: themeData,
         home: Scaffold(
           body: IndexedStack(
-            index: page.value!.index,
+            index: page.value.index,
             children: <Widget>[
               HomePage(),
               DokiPage(),
@@ -128,13 +129,13 @@ class _BottomNavigationBarWidgetState extends State<_BottomNavigationBarWidget>
   @override
   void initState() {
     super.initState();
-    _pageTapListener = TapListener(bootContext.page.value!);
+    _pageTapListener = TapListener(bootContext.page.value);
   }
 
   @override
   void pageChanged() {
     setState(() {
-      _pageTapListener!.onTap(bootContext.page.value!);
+      _pageTapListener!.onTap(bootContext.page.value);
     });
   }
 
@@ -175,7 +176,7 @@ class _BottomNavigationBarWidgetState extends State<_BottomNavigationBarWidget>
               tooltip: '',
               label: S.of(context).person_tle),
         ],
-        currentIndex: bootContext.page.value!.index,
+        currentIndex: bootContext.page.value.index,
         onTap: (int index) {
           bootContext.page.value = PageCategory.values[index];
         },

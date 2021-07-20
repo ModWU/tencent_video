@@ -6,12 +6,10 @@ class LanguageCodes {
   static const String en = 'en';
   static const String zh = 'zh';
 
+  static const String system = '';
+
   static const Locale defaultLocale = Locale.fromSubtags(languageCode: en);
 
-  static Locale? getLocaleByLanguage(String? language) {
-    if (language == null) {
-      return null;
-    }
-    return Locale.fromSubtags(languageCode: language);
-  }
+  static Locale? getLocaleByLanguage(String language) =>
+      language == system ? null : Locale.fromSubtags(languageCode: language);
 }

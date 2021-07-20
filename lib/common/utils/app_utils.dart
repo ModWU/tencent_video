@@ -4,6 +4,8 @@ import 'package:tencent_video/resources/colors.dart';
 import 'package:tencent_video/resources/styles.dart';
 
 class AppUtils {
+  AppUtils._();
+
   static Locale getLocalByCode(String code) {
     return Locale.fromSubtags(languageCode: code);
   }
