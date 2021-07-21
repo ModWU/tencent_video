@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tencent_video/common/logs/app_log.dart';
 import 'package:tencent_video/resources/styles.dart';
 import '../app_state.dart';
 import '../base.dart';
@@ -12,7 +13,7 @@ class DokiPage extends StatefulWidget {
 class _DokiPageState extends State<DokiPage> with BootMiXin {
   @override
   Widget build(BuildContext context) {
-    print("doki build");
+    Logger.log("doki build");
     final ThemeData localTheme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text("title: doki",),),

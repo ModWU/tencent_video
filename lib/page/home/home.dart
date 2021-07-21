@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:tencent_video/common/logs/app_log.dart';
 import 'package:tencent_video/page/home/config.dart';
 import 'package:tencent_video/resources/styles.dart';
 import '../app_state.dart';
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> with BootMiXin, TickerProviderState
   void _changeTabViewPosition() {
     final int tabViewIndex = _tabViewController!.animation!.value.round();
 
-    print('tabViewIndex: $tabViewIndex, _currentIndex: $_currentIndex');
+    Logger.log('tabViewIndex: $tabViewIndex, _currentIndex: $_currentIndex');
 
     if (tabViewIndex != _currentIndex) {
       _changedTabIndex(tabViewIndex);
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> with BootMiXin, TickerProviderState
   }
 
   void _changedTabPosition() {
-    print('_changedTabPosition');
+    Logger.log('_changedTabPosition');
     final int currentIndex = _tabController!.animation!.value.round();
     if (_tabController!.index != _currentIndex) {
       if (_tabController!.index == currentIndex) {
@@ -128,12 +129,12 @@ class _HomePageState extends State<HomePage> with BootMiXin, TickerProviderState
     } else {
       bootContext.changeThemeStyle(ThemeStyle.light);
     }
-    print('index: $index => ${_tabController!.offset}');
+    Logger.log('index: $index => ${_tabController!.offset}');
   }
 
   @override
   Widget build(BuildContext context) {
-    print("home build");
+    Logger.log("home build");
     final ThemeData localTheme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(

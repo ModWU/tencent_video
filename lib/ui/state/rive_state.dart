@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 import 'package:tencent_video/common/listener/tap.dart';
+import 'package:tencent_video/common/logs/app_log.dart';
 
 class RiveSimpleStateMachineWidget extends StatefulWidget {
 
@@ -61,11 +62,11 @@ class _RiveSimpleStateMachineWidgetState extends State<RiveSimpleStateMachineWid
 
         final StateMachineController? controller =
             StateMachineController.fromArtboard(artboard, widget.stateMachineName);
-        print('initstate=> ${widget.value} => controller: $controller');
+        Logger.log('initstate=> ${widget.value} => controller: $controller');
         if (controller != null) {
           artboard.addController(controller);
           _input = controller.findInput(widget.input);
-          print('initstate=> ${widget.value} => _input: $_input');
+          Logger.log('initstate=> ${widget.value} => _input: $_input');
           _input!.value = active;
         }
         setState(() => _riveArtboard = artboard);
@@ -101,15 +102,15 @@ class _RiveSimpleStateMachineWidgetState extends State<RiveSimpleStateMachineWid
 
   void _onTap() {
     if (widget.tapListener.value == widget.value) {
-      print('被点击 active: $active');
+      Logger.log('被点击 active: $active');
       //点击状态
       if (!active) {
         _input!.value = active = true;
       }
-      print('被点击 value: ${widget.value}');
+      Logger.log('被点击 value: ${widget.value}');
     } else if (currentValue == widget.value) {
       //消失状态
-      print('消失点击 value: ${widget.value}');
+      Logger.log('消失点击 value: ${widget.value}');
       _input!.value = active = false;
     }
 
@@ -221,15 +222,15 @@ class _RiveSimpleWidgetState extends State<RiveSimpleWidget> {
 
   void _onTap() {
     if (widget.tapListener.value == widget.value) {
-      print('被点击 active: $active');
+      Logger.log('被点击 active: $active');
       //点击状态
       if (!active) {
         _controller.isActive = active = true;
       }
-      print('被点击 value: ${widget.value}');
+      Logger.log('被点击 value: ${widget.value}');
     } else if (currentValue == widget.value) {
       //消失状态
-      print('消失点击 value: ${widget.value}');
+      Logger.log('消失点击 value: ${widget.value}');
       _controller.isActive = active = false;
     }
 

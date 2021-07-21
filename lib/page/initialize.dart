@@ -49,7 +49,7 @@ void _runOnLogger(Runner runner) {
     zoneValues: <String, String>{'name': 'app'},
     zoneSpecification: ZoneSpecification(
         print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
-      parent.print(zone, Logger.decorateLog(line));
+      Logger.logByZoneDelegate(self, parent, zone, line);
     }),
   );
 }

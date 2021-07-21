@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tencent_video/common/listener/tap.dart';
+import 'package:tencent_video/common/logs/app_log.dart';
 import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/person/person.dart';
 import 'package:tencent_video/page/vip/vip.dart';
@@ -52,6 +53,12 @@ class _BootState extends State<Boot> with BootManager {
     });
   }
 
+  @override
+  void reassemble() {
+    super.reassemble();
+    print('boot reassemble');
+  }
+
   void _languageChanged() {
     setState(() {
       _locale = LanguageCodes.getLocaleByLanguage(language.value);
@@ -79,7 +86,7 @@ class _BootState extends State<Boot> with BootManager {
 
   @override
   Widget build(BuildContext context) {
-    print('boot build');
+    Logger.log('boot build');
     return RootRestorationScope(
       restorationId: 'root',
       child: MaterialApp(

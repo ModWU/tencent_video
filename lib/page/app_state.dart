@@ -26,7 +26,11 @@ class AppState<T> extends Observer<T> {
 
   static bool? _initialized;
 
+  static Zone? _appZone;
+
   static bool get initialized => _initialized == true;
+
+  static Zone get appZone => _appZone!;
 
   static AppState<T> _from<T>(T value) {
     _allListeners ??= <Listenable>[];
@@ -68,6 +72,7 @@ class AppState<T> extends Observer<T> {
   static Future<void> initialize() async {
     assert(!initialized);
     _initialized = true;
+    _appZone = Zone.current;
     AppUtils.setAppSystemUIOverlayStyle();
     print('模拟十秒初始化');
     await Future<void>.delayed(const Duration(milliseconds: 10000));
@@ -80,6 +85,7 @@ class AppState<T> extends Observer<T> {
   static void doDispose() {
     assert(initialized);
     _initialized = null;
+    _appZone = null;
     _allListeners = null;
     _allBindListeners = null;
   }

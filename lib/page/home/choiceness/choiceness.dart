@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:tencent_video/common/listener/ob.dart';
+import 'package:tencent_video/common/logs/app_log.dart';
 import 'package:tencent_video/resources/strings.dart';
 import '../../base.dart';
 
@@ -59,7 +60,7 @@ class _ChoicenessState extends State<Choiceness>
                     value: LanguageCodes.zh,
                     groupValue: bootContext.language.value,
                     onChanged: (String? value) {
-                      print("value: $value, bootContext.value: ${bootContext.language.value}");
+                      Logger.log("value: $value, bootContext.value: ${bootContext.language.value}");
                       bootContext.changeLanguage(value!);
                     },
                   ),
