@@ -1,16 +1,15 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:tencent_video/common/logs/app_log.dart';
+import 'package:tencent_video/common/log/app_log.dart';
 import 'package:tencent_video/page/app_state.dart';
 
-typedef Runner = void Function();
-
-void startBoot(Widget root) {
+void bootApp(Widget app) {
   _runOnLogger(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await AppState.initialize();
-    runApp(root);
+    runApp(app);
   });
 }
 
@@ -23,7 +22,7 @@ String _stringify(Object? exception) {
   return 'Error';
 }
 
-void _runOnLogger(Runner runner) {
+void _runOnLogger(VoidCallback runner) {
   ErrorWidget.builder = (FlutterErrorDetails details) {
     Logger.reportWidgetError(details);
     String message = '';

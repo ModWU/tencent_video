@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 import 'package:tencent_video/common/listener/tap.dart';
-import 'package:tencent_video/common/logs/app_log.dart';
+import 'package:tencent_video/common/log/app_log.dart';
 
 class RiveSimpleStateMachineWidget extends StatefulWidget {
 

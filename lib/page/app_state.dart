@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/ob.dart';
-import 'package:tencent_video/common/utils/app_utils.dart';
-import 'package:tencent_video/resources/strings.dart';
-import 'package:tencent_video/resources/styles.dart';
+import 'package:tencent_video/common/util/app_utils.dart';
+import 'package:tencent_video/resource/strings.dart';
+import 'package:tencent_video/resource/styles.dart';
 
 enum PageCategory {
   home,

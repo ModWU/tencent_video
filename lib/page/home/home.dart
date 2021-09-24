@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tencent_video/common/logs/app_log.dart';
+import 'package:tencent_video/common/log/app_log.dart';
 import 'package:tencent_video/page/home/config.dart';
-import 'package:tencent_video/resources/styles.dart';
+import 'package:tencent_video/resource/styles.dart';
 import '../app_state.dart';
 import '../base.dart';
 

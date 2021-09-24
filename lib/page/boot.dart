@@ -1,13 +1,15 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tencent_video/common/listener/tap.dart';
-import 'package:tencent_video/common/logs/app_log.dart';
+import 'package:tencent_video/common/log/app_log.dart';
 import 'package:tencent_video/generated/l10n.dart';
 import 'package:tencent_video/page/person/person.dart';
 import 'package:tencent_video/page/vip/vip.dart';
-import 'package:tencent_video/resources/strings.dart';
-import 'package:tencent_video/resources/styles.dart';
+import 'package:tencent_video/resource/strings.dart';
+import 'package:tencent_video/resource/styles.dart';
 import 'package:tencent_video/ui/state/rive_state.dart';
 import 'app_state.dart';
 import 'base.dart';
@@ -87,27 +89,25 @@ class _BootState extends State<Boot> with BootManager {
   @override
   Widget build(BuildContext context) {
     Logger.log('boot build');
-    return RootRestorationScope(
-      restorationId: 'root',
-      child: MaterialApp(
-        localizationsDelegates: _delegates,
-        supportedLocales: S.delegate.supportedLocales,
-        locale: _locale,
-        localeListResolutionCallback: _handleLocales,
-        theme: themeData,
-        home: Scaffold(
-          body: IndexedStack(
-            index: page.value.index,
-            children: <Widget>[
-              HomePage(),
-              DokiPage(),
-              VipPage(),
-              MessagePage(),
-              PersonPage(),
-            ],
-          ),
-          bottomNavigationBar: const _BottomNavigationBarWidget(),
+    return MaterialApp(
+      localizationsDelegates: _delegates,
+      restorationScopeId: 'root',
+      supportedLocales: S.delegate.supportedLocales,
+      locale: _locale,
+      localeListResolutionCallback: _handleLocales,
+      theme: themeData,
+      home: Scaffold(
+        body: IndexedStack(
+          index: page.value.index,
+          children: <Widget>[
+            HomePage(),
+            DokiPage(),
+            VipPage(),
+            MessagePage(),
+            PersonPage(),
+          ],
         ),
+        bottomNavigationBar: const _BottomNavigationBarWidget(),
       ),
     );
   }
@@ -194,45 +194,53 @@ class _BottomNavigationBarWidgetState extends State<_BottomNavigationBarWidget>
   Widget _getRiveIcon(PageCategory page, double size) {
     switch (page) {
       case PageCategory.home:
-        return RiveSimpleStateMachineWidget(
+        /*return RiveSimpleStateMachineWidget(
             uri: 'assets/mr-help.riv',
             stateMachineName: 'State Machine 1',
             input: 'Wrong',
             size: size,
             tapListener: _pageTapListener!,
-            value: PageCategory.home);
+            value: PageCategory.home);*/
+        return Icon(Icons.add, size: size);
       case PageCategory.doki:
-        return RiveSimpleWidget(
+        /*return RiveSimpleWidget(
             uri: 'assets/landing-animation.riv',
             animationName: 'Landing',
             size: size,
             useArtboardSize: true,
             tapListener: _pageTapListener!,
-            value: PageCategory.doki);
+            value: PageCategory.doki);*/
+        return Icon(Icons.clear, size: size);
       case PageCategory.vip:
-        return RiveSimpleStateMachineWidget(
+        /*return RiveSimpleStateMachineWidget(
             uri: 'assets/mr-help.riv',
             stateMachineName: 'State Machine 1',
             input: 'Speak',
             size: size,
             tapListener: _pageTapListener!,
-            value: PageCategory.vip);
+            value: PageCategory.vip);*/
+        return Icon(Icons.image, size: size);
       case PageCategory.message:
-        return RiveSimpleStateMachineWidget(
+        /*return RiveSimpleStateMachineWidget(
             uri: 'assets/mr-help.riv',
             stateMachineName: 'State Machine 1',
             input: 'Speak',
             size: size,
             tapListener: _pageTapListener!,
-            value: PageCategory.message);
+            value: PageCategory.message);*/
+        return Icon(Icons.map, size: size);
       case PageCategory.person:
-        return RiveSimpleStateMachineWidget(
+        /*return RiveSimpleStateMachineWidget(
             uri: 'assets/mr-help.riv',
             stateMachineName: 'State Machine 1',
             input: 'Happy',
             size: size,
             tapListener: _pageTapListener!,
-            value: PageCategory.person);
+            value: PageCategory.person);*/
+        return Icon(
+          Icons.build,
+          size: size,
+        );
     }
   }
 }

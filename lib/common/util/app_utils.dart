@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tencent_video/resources/colors.dart';
-import 'package:tencent_video/resources/styles.dart';
+import 'package:tencent_video/resource/colors.dart';
+import 'package:tencent_video/resource/styles.dart';
 
 class AppUtils {
   AppUtils._();

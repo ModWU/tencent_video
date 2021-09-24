@@ -1,39 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tencent_video/common/listener/data_notifier.dart';
 import 'package:tencent_video/common/listener/ob.dart';
+import 'package:tencent_video/common/util/countdown.dart';
 
 class Cartoon extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CartoonState();
 }
 
-enum Type {
-  search, refresh, changeName
-}
-
-/*class PageAController with DataNotifier {
-  
-  String? _searchKey;
-  String get searchKey => _searchKey!;
-
-  set searchKey(String value) {
-   if (value == _searchKey) return;
-   _searchKey = value;
-    notifyListeners('search');
-  }
-
-  void addSearchListener(Type type, VoidCallback listener) {
-    addListener(type, listener);
-  }
-
-  void removeSearchListener(Type type, VoidCallback listener) {
-    removeListenerByKey(type, listener);
-  }
-
-}*/
-
 class _CartoonState extends State<Cartoon> with RestorationMixin {
   final RestorableDouble _counter = RestorableDouble(0);
+
+  bool _countdownFinish = false;
 
   @override
   void initState() {
@@ -42,7 +20,6 @@ class _CartoonState extends State<Cartoon> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Center(
       child: Column(
         children: [
@@ -86,6 +63,15 @@ class _CartoonState extends State<Cartoon> with RestorationMixin {
               initialValue: _counter.value.ob,
             ),
           ),
+          CountdownWidget(const Duration(seconds: 12), builder:
+              (BuildContext context, Duration remaining, String formatStr) {
+            return Text(formatStr);
+          }, onFinish: () {
+            setState(() {
+              _countdownFinish = true;
+            });
+          },),
+          Text(_countdownFinish?"finish":"loading")
         ],
       ),
     );

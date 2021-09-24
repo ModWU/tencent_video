@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tencent_video/page/boot.dart';
 import 'package:tencent_video/page/initialize.dart';
 
-void main() => startBoot(TencentVideoApp());
+void main() => bootApp(TencentVideoApp());
 
 class TencentVideoApp extends StatelessWidget {
   @override

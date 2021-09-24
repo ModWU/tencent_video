@@ -11,12 +11,14 @@ import 'package:tencent_video/page/home/teleplay/teleplay.dart';
 import 'package:tencent_video/page/home/variety/variety.dart';
 
 import 'children/children.dart';
+import 'game/game.dart';
 
 class HomeConfigs {
   HomeConfigs._();
 
   static List<Widget> getViews(BuildContext context) {
     return <Widget>[
+      CardsDemo(),
       Subscribe(),
       Choiceness(),
       Discover(),
@@ -30,10 +32,11 @@ class HomeConfigs {
     ];
   }
 
-  static int get length => 19;
+  static int get length => 20;
 
   static List<Widget> getTabs(BuildContext context) {
     return <Widget>[
+      Tab(text: 'game'),
       Tab(text: S.of(context).sub_txt),
       Tab(text: S.of(context).cho_txt),
       Tab(text: S.of(context).dis_txt),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tencent_video/resources/styles.dart';
+import 'package:tencent_video/resource/styles.dart';
 import '../app_state.dart';
 import '../base.dart';
 

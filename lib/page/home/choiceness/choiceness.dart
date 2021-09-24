@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:tencent_video/common/listener/ob.dart';
-import 'package:tencent_video/common/logs/app_log.dart';
-import 'package:tencent_video/resources/strings.dart';
+import 'package:tencent_video/common/log/app_log.dart';
+import 'package:tencent_video/resource/strings.dart';
 import '../../base.dart';
 
 class Choiceness extends StatefulWidget {

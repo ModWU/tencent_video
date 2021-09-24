@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tencent_video/common/utils/time_utils.dart';
+import 'package:tencent_video/common/util/time_utils.dart';
 import 'color_log.dart';
 
 class Logger {
