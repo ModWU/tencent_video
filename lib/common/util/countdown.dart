@@ -1,94 +1,71 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-typedef CountdownBuilder = Widget Function(
+typedef CountdownWidgetBuilder = Widget Function(
     BuildContext context, Duration remaining, String formatStr);
-typedef CountdownErrorBuilder = Widget Function(
+typedef CountdownErrorWidgetBuilder = Widget Function(
     BuildContext context, Object error);
 typedef TimeFormatHandler = String Function(Duration duration);
 
-class CountdownWidget extends StatefulWidget {
-  const CountdownWidget(
-    this.initialValue, {
-    required this.builder,
-    this.errorBuilder,
-    this.onFinish,
-    this.formatter,
-    this.resetTag = const Object(),
-    this.isBroadcast = false,
-  });
+class CountdownBuilder extends StatefulWidget {
+  const CountdownBuilder(
+      this.initialValue, {
+        required this.builder,
+        this.errorBuilder,
+        this.onFinish,
+        this.formatter,
+        this.resetTag = const Object(),
+      });
 
   final Duration initialValue;
   final Object resetTag;
-  final bool isBroadcast;
-  final CountdownBuilder builder;
+  final CountdownWidgetBuilder builder;
   final TimeFormatHandler? formatter;
-  final CountdownErrorBuilder? errorBuilder;
+  final CountdownErrorWidgetBuilder? errorBuilder;
   final VoidCallback? onFinish;
 
   @override
-  State<StatefulWidget> createState() => CountdownWidgetState();
+  State<StatefulWidget> createState() => _CountdownBuilderState();
 }
 
 DateTime _kBaseTimeline = DateTime(2021, 9, 24);
 
-class CountdownWidgetState extends State<CountdownWidget>
+class _CountdownBuilderState extends State<CountdownBuilder>
     with RestorationMixin {
   Stream<Duration>? _countdownTicker;
 
   late final RestorableDateTime _currentValue =
-      RestorableDateTime(_toEpochFromCountdown(widget.initialValue));
+  RestorableDateTime(_toEpochFromCountdown(widget.initialValue));
 
-  String _formatter(Duration duration) {
-    if (widget.formatter != null) return widget.formatter!(duration);
-    if (duration.inHours >= 1) return _formatByHours(duration);
-    if (duration.inMinutes >= 1) return _formatByMinutes(duration);
+  String _getFormatCountDown(Duration countdown) {
+    if (widget.formatter != null) return widget.formatter!(countdown);
+    if (countdown.inHours >= 1) return _formatByHours(countdown);
+    if (countdown.inMinutes >= 1) return _formatByMinutes(countdown);
 
-    return _formatBySeconds(duration, keepPlace: false);
+    return _formatBySeconds(countdown, keepPlace: false);
   }
 
   @override
   void initState() {
     super.initState();
-    if (widget.initialValue > Duration.zero) {
-      _countdownTicker =
-          _tick(widget.initialValue, broadcast: widget.isBroadcast);
-    }
+    _countdownTicker = _createCountDownTicker(widget.initialValue);
   }
 
-  static Stream<Duration> _tick(Duration tickCount, {bool broadcast = false}) {
+  static Stream<Duration> _createCountDownTicker(Duration tickCount) {
     final Stream<Duration> stream = Stream<Duration>.periodic(
       const Duration(seconds: 1),
-      (int count) => tickCount - Duration(seconds: count + 1),
+          (int count) => tickCount - Duration(seconds: count + 1),
     ).take(tickCount.inSeconds);
-    if (broadcast) {
-      return stream.asBroadcastStream();
-    }
     return stream;
   }
 
   @override
-  void didUpdateWidget(covariant CountdownWidget oldWidget) {
+  void didUpdateWidget(covariant CountdownBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final bool isNeedReset = widget.resetTag != oldWidget.resetTag;
+    final bool needReset = widget.resetTag != oldWidget.resetTag;
 
-    if (isNeedReset || widget.isBroadcast != oldWidget.isBroadcast) {
+    if (needReset) {
       setState(() {
-        if (isNeedReset || _countdownTicker == null) {
-          _countdownTicker = _tick(
-            isNeedReset
-                ? widget.initialValue
-                : _parseCountdownFromEpoch(_currentValue.value),
-            broadcast: widget.isBroadcast,
-          );
-        } else {
-          if (widget.isBroadcast) {
-            _countdownTicker = _countdownTicker!.asBroadcastStream();
-          } else {
-            _countdownTicker = _tick(
-                _parseCountdownFromEpoch(_currentValue.value),
-                broadcast: widget.isBroadcast);
-          }
-        }
+        _countdownTicker = _createCountDownTicker(widget.initialValue);
       });
     }
   }
@@ -105,9 +82,9 @@ class CountdownWidgetState extends State<CountdownWidget>
           }
         } else {
           if (snapshot.hasError) {
-            widget.errorBuilder!(context, snapshot.error!);
+            return widget.errorBuilder!(context, snapshot.error!);
           } else if (!snapshot.hasData) {
-            widget.errorBuilder!(context, 'No data!');
+            return widget.errorBuilder!(context, 'No data!');
           }
         }
 
@@ -119,7 +96,8 @@ class CountdownWidgetState extends State<CountdownWidget>
           });
         }
 
-        return widget.builder(context, countdown, _formatter(countdown));
+        return widget.builder(
+            context, countdown, _getFormatCountDown(countdown));
       },
     );
   }
@@ -143,7 +121,7 @@ class CountdownWidgetState extends State<CountdownWidget>
 Duration _parseCountdownFromEpoch(DateTime value) {
   final Duration countDownDuration = Duration(
       milliseconds:
-          value.millisecondsSinceEpoch - _kBaseTimeline.millisecondsSinceEpoch);
+      value.millisecondsSinceEpoch - _kBaseTimeline.millisecondsSinceEpoch);
   assert(countDownDuration >= Duration.zero);
   return countDownDuration;
 }
@@ -162,7 +140,7 @@ String _formatBySeconds(Duration duration, {bool keepPlace = true}) =>
 
 String _formatByMinutes(Duration duration) {
   final String twoDigitMinutes =
-      _oneOrTwoDigits(duration.inMinutes.remainder(60));
+  _oneOrTwoDigits(duration.inMinutes.remainder(60));
   return '$twoDigitMinutes:${_formatBySeconds(duration)}';
 }
 

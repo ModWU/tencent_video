@@ -63,7 +63,7 @@ class _CartoonState extends State<Cartoon> with RestorationMixin {
               initialValue: _counter.value.ob,
             ),
           ),
-          CountdownWidget(const Duration(seconds: 12), builder:
+          CountdownBuilder(const Duration(seconds: 12), builder:
               (BuildContext context, Duration remaining, String formatStr) {
             return Text(formatStr);
           }, onFinish: () {
@@ -71,7 +71,42 @@ class _CartoonState extends State<Cartoon> with RestorationMixin {
               _countdownFinish = true;
             });
           },),
-          Text(_countdownFinish?"finish":"loading")
+          Text(_countdownFinish?"finish":"loading"),
+          Hero(
+            tag: 'image',
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).push(PageRouteBuilder<double>(
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return NewApp();
+                  },
+                  transitionDuration: const Duration(milliseconds: 3000),
+                  maintainState: false,
+                  reverseTransitionDuration:
+                  const Duration(milliseconds: 3000),
+                  //opaque: false,
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                ));
+              },
+              child: Container(
+                width: 100,
+                height: 100,
+                color: Colors.blue,
+                alignment: Alignment.center,
+                child: Text("haha"),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -95,4 +130,30 @@ class _CartoonState extends State<Cartoon> with RestorationMixin {
     _counter.dispose();
     super.dispose();
   }
+}
+
+class NewApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: 'image',
+      flightShuttleBuilder: (
+          BuildContext flightContext,
+          Animation<double> animation,
+          HeroFlightDirection flightDirection,
+          BuildContext fromHeroContext,
+          BuildContext toHeroContext,
+        ) {
+          return this;
+        },
+      child: Scaffold(
+        body: ListView(
+          children: List.generate(100, (index) => Text("$index")).toList(),
+        ),
+      ),
+    );
+  }
+
+
+
 }
